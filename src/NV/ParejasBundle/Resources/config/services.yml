@@ -1,0 +1,7 @@
+parameters:
+#    nv_parejas.example.class: NV\ParejasBundle\Example
+
+services:
+#    nv_parejas.example:
+#        class: %nv_parejas.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

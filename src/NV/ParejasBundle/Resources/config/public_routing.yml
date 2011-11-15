@@ -1,0 +1,120 @@
+portada:
+    pattern:  /
+    defaults: { _controller: NVParejasBundle:Default:index }         
+    
+acceso:
+    pattern:  /acceso
+    defaults: { _controller: NVParejasBundle:Seguridad:acceso }
+
+acceso_check:
+    pattern:  /acceso_check
+    
+registro:
+    pattern:  /registro
+    defaults: { _controller: NVParejasBundle:Seguridad:registro }        
+    
+usuarios:
+    pattern:  /usuarios/{pag}
+    defaults: { _controller: NVParejasBundle:Usuarios:index, pag: 1 }    
+    requirements:
+      pag: \d+  
+
+usuarios_usuario:
+    pattern:  /usuarios/{user}/{pag}
+    defaults: { _controller: NVParejasBundle:Usuarios:usuario, pag: 1 }
+    requirements:
+      user: \w+
+      pag: \d+ 
+
+anuncios:
+    pattern:  /anuncios/{pag}
+    defaults: { _controller: NVParejasBundle:Anuncios:index, pag: 1 }
+    requirements:
+      pag: \d+
+      
+anuncios_usuario:
+    pattern:  /anuncios/{user}/{pag}
+    defaults: { _controller: NVParejasBundle:Anuncios:usuario, pag: 1 }
+    requirements:
+      user: \w+
+      pag: \d+      
+    
+fotos:
+    pattern:  /fotos/{pag}
+    defaults: { _controller: NVParejasBundle:Fotos:index, pag: 1 }
+    requirements:
+      pag: \d+
+      
+fotos_usuario:
+    pattern:  /fotos/{user}/{pag}
+    defaults: { _controller: NVParejasBundle:Fotos:usuario, pag: 1 }
+    requirements:
+      user: \w+
+      pag: \d+     
+    
+videos:
+    pattern:  /videos/{pag}
+    defaults: { _controller: NVParejasBundle:Videos:index, pag: 1 }
+    requirements:
+      pag: \d+
+      
+videos_usuario:
+    pattern:  /videos/{user}/{pag}
+    defaults: { _controller: NVParejasBundle:Videos:usuario, pag: 1 }
+    requirements:
+      user: \w+
+      pag: \d+    
+    
+locales:
+    pattern:  /locales/{pag}
+    defaults: { _controller: NVParejasBundle:Locales:index, pag: 1 }
+    requirements:
+      pag: \d+
+      
+locales_local:
+    pattern:  /locales/{local}/{pag}
+    defaults: { _controller: NVParejasBundle:Locales:local, pag: 1 }
+    requirements:
+      local: \w+
+      pag: \d+      
+
+eventos:
+    pattern:  /eventos/{pag}
+    defaults: { _controller: NVParejasBundle:Eventos:index, pag: 1 }
+    requirements:
+      pag: \d+  
+
+grupos:
+    pattern:  /grupos/{pag}
+    defaults: { _controller: NVParejasBundle:Grupos:index, pag: 1 }
+    requirements:
+      pag: \d+
+      
+grupos_grupo:
+    pattern:  /grupos/{grupo}/{pag}
+    defaults: { _controller: NVParejasBundle:Grupos:grupo, pag: 1 }
+    requirements:
+      grupo: \w+
+      pag: \d+         
+
+grupo_seccion:
+    pattern:  /grupos/{grupo}/{seccion}/{pag}
+    defaults: { _controller: NVParejasBundle:Grupos:seccion, pag: 1 }
+    requirements:
+      grupo: \w+
+      seccion: boletines|conversaciones|fotos|videos|usuarios|administradores
+      pag: \d+ 
+      
+grupo_item:
+    pattern:  /grupos/{grupo}/{item}/{id}
+    defaults: { _controller: NVParejasBundle:Grupos:item}
+    requirements:
+      grupo: \w+
+      item: boletin|conversacion
+      id: \d+                   
+        
+afiliados:
+    pattern:  /afiliados/{apartado}
+    defaults: { _controller: NVParejasBundle:Afiliados:index}
+    requirements:
+      apartado: alta|registro|acceso|estadisticas|facturas|creatividades|datospersonales|condiciones
