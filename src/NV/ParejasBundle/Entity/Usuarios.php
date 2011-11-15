@@ -6,37 +6,44 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
 use NV\ParejasBundle\Validator\DNI;
 
 /**
- * NV\ParejasBundle\Entity
+ * Desymfony\DesymfonyBundle\Entity
  *
  * @ORM\Table(name="usuarios")
  * @ORM\Entity()
  * @UniqueEntity(fields="email")
  */
-class Usuarios implements UserInterface, \Serializable{
+class Usuarios implements UserInterface, \Serializable
+{
     /*
      * Implementation of UserInterface
      */
 
-    public function getRoles(){
+    public function getRoles()
+    {
         return array('ROLE_USER');
     }
 
-    public function getSalt(){
+    public function getSalt()
+    {
         return false;
     }
 
-    public function getUsername(){
-        return $this->username;
+    public function getUsername()
+    {
+        return $this->email;
     }
 
-    public function eraseCredentials(){
+    public function eraseCredentials()
+    {
 
     }
 
-    public function equals(UserInterface $user){
+    public function equals(UserInterface $user)
+    {
         return $user->getUsername() == $this->getUsername();
     }
 
@@ -99,21 +106,26 @@ class Usuarios implements UserInterface, \Serializable{
     */
     protected $password;
 
-    public function __toString(){
+    
+    public function __toString()
+    {
         return $this->getNombreCompleto();
     }
 
-    public function getNombreCompleto(){
+    public function getNombreCompleto()
+    {
         return $this->getNombre().' '.$this->getApellidos();
     }
 
-    public function serialize(){
+    public function serialize()
+    {
         return serialize(array(
             $this->getEmail()
         ));
     }
 
-    public function unserialize($serialized){
+    public function unserialize($serialized)
+    {
         $arr = unserialize($serialized);
         $this->setEmail($arr[0]);
     }
@@ -123,7 +135,8 @@ class Usuarios implements UserInterface, \Serializable{
      *
      * @return integer $id
      */
-    public function getId(){
+    public function getId()
+    {
         return $this->id;
     }
 
@@ -132,7 +145,8 @@ class Usuarios implements UserInterface, \Serializable{
      *
      * @param string $nombre
      */
-    public function setNombre($nombre){
+    public function setNombre($nombre)
+    {
         $this->nombre = $nombre;
     }
 
@@ -141,7 +155,8 @@ class Usuarios implements UserInterface, \Serializable{
      *
      * @return string $nombre
      */
-    public function getNombre(){
+    public function getNombre()
+    {
         return $this->nombre;
     }
 
@@ -150,7 +165,8 @@ class Usuarios implements UserInterface, \Serializable{
      *
      * @param string $apellidos
      */
-    public function setApellidos($apellidos){
+    public function setApellidos($apellidos)
+    {
         $this->apellidos = $apellidos;
     }
 
@@ -159,7 +175,8 @@ class Usuarios implements UserInterface, \Serializable{
      *
      * @return string $apellidos
      */
-    public function getApellidos(){
+    public function getApellidos()
+    {
         return $this->apellidos;
     }
 
@@ -168,7 +185,8 @@ class Usuarios implements UserInterface, \Serializable{
      *
      * @param string $dni
      */
-    public function setDni($dni){
+    public function setDni($dni)
+    {
         $this->dni = $dni;
     }
 
@@ -177,7 +195,8 @@ class Usuarios implements UserInterface, \Serializable{
      *
      * @return string $dni
      */
-    public function getDni(){
+    public function getDni()
+    {
         return $this->dni;
     }
 
@@ -186,7 +205,8 @@ class Usuarios implements UserInterface, \Serializable{
      *
      * @param string $direccion
      */
-    public function setDireccion($direccion){
+    public function setDireccion($direccion)
+    {
         $this->direccion = $direccion;
     }
 
@@ -195,7 +215,8 @@ class Usuarios implements UserInterface, \Serializable{
      *
      * @return string $direccion
      */
-    public function getDireccion(){
+    public function getDireccion()
+    {
         return $this->direccion;
     }
 
@@ -204,7 +225,8 @@ class Usuarios implements UserInterface, \Serializable{
      *
      * @param string $telefono
      */
-    public function setTelefono($telefono){
+    public function setTelefono($telefono)
+    {
         $this->telefono = $telefono;
     }
 
@@ -213,7 +235,8 @@ class Usuarios implements UserInterface, \Serializable{
      *
      * @return string $telefono
      */
-    public function getTelefono(){
+    public function getTelefono()
+    {
         return $this->telefono;
     }
 
@@ -222,7 +245,8 @@ class Usuarios implements UserInterface, \Serializable{
      *
      * @param string $email
      */
-    public function setEmail($email){
+    public function setEmail($email)
+    {
         $this->email = $email;
     }
 
@@ -231,7 +255,8 @@ class Usuarios implements UserInterface, \Serializable{
      *
      * @return string $email
      */
-    public function getEmail(){
+    public function getEmail()
+    {
         return $this->email;
     }
 
@@ -240,7 +265,8 @@ class Usuarios implements UserInterface, \Serializable{
      *
      * @param string $password
      */
-    public function setPassword($password){
+    public function setPassword($password)
+    {
         $this->password = $password;
     }
 
@@ -249,8 +275,10 @@ class Usuarios implements UserInterface, \Serializable{
      *
      * @return string $password
      */
-    public function getPassword(){
+    public function getPassword()
+    {
         return $this->password;
     }
+
 
 }
