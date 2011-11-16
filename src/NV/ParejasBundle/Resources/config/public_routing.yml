@@ -1,6 +1,6 @@
 portada:
     pattern:  /
-    defaults: { _controller: NVParejasBundle:Default:index }         
+    defaults: { _controller: NVParejasBundle:Portada:index }         
     
 acceso:
     pattern:  /acceso
@@ -8,6 +8,9 @@ acceso:
 
 acceso_check:
     pattern:  /acceso_check
+
+logout:
+    pattern:  /logout
     
 registro:
     pattern:  /registro
