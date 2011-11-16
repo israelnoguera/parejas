@@ -1,1 +1,21 @@
-Página inicial
+{% extends "::base.html.twig" %}
+
+{% block titulo %}Portada{% endblock %}
+
+{% block cuerpo %}
+<h1>Página inicial</h1>
+    
+    {% if app.user %}
+        <p>Estás logueado como <strong>{{ app.user.username }}</strong></p>
+        <p><a href="{{ path('logout') }}">Salir</a></p>
+    {% endif %}    
+    
+    {% if is_granted('ROLE_ADMIN') %}
+        <li>Tienes Rol de Admin</li>
+    {% endif %}    
+
+<ul>
+    <li><a href="{{ path('acceso') }}">Iniciar Sesión</a></li>
+    <li><a href="{{ path('registro') }}">Registro</a></li>
+</ul>
+{% endblock cuerpo %}

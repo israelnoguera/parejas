@@ -11,6 +11,11 @@ security:
             logout:
                 path:   /logout
                 target: /
+            remember_me:
+                key: aSecretKey
+                lifetime: 3600
+                path: /
+                domain: ~ # El valor predeterminado es el dominio actual de $_SERVER               
     
     access_control:
         - { path: ^/perfil        , roles: ROLE_USER }
