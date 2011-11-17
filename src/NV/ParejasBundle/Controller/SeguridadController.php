@@ -28,7 +28,6 @@ class SeguridadController extends Controller{
         
         $usuario = new Usuarios();
         $form = $this->createForm(new UsuarioType, $usuario, array());
-        //$form = $this->get('form.factory')->create(new UsuarioType(), array());
 
         $request = $this->get('request');
         if ($request->getMethod() == 'POST') {

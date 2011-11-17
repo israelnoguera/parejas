@@ -22,7 +22,7 @@ class Usuarios implements UserInterface, \Serializable{
      */
 
     public function getRoles(){
-        return array($this->roles);
+        //return array('ROLE_USER');
     }
 
     public function getSalt(){
@@ -80,14 +80,14 @@ class Usuarios implements UserInterface, \Serializable{
     public function serialize()
     {
         return serialize(array(
-            $this->getUsername()
+            $this->getEmail()
         ));
     }
 
     public function unserialize($serialized)
     {
         $arr = unserialize($serialized);
-        $this->setUsername($arr[0]);
+        $this->setEmail($arr[0]);
     }
 
     /**

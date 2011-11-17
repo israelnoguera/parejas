@@ -13,16 +13,10 @@
 
     <form action="{{ path('registro') }}" method="post" {{ form_enctype(form) }}>
 
-        {{ form_errors(form.nombre) }}
+        {{ form_errors(form.username) }}
         <p>
-            {{ form_label(form.nombre) }}
-            {{ form_widget(form.nombre) }}
-        </p>
-
-        {{ form_errors(form.apellidos) }}
-        <p>
-            {{ form_label(form.apellidos) }}
-            {{ form_widget(form.apellidos) }}
+            {{ form_label(form.username) }}
+            {{ form_widget(form.username) }}
         </p>
 
         {{ form_errors(form.email) }}
@@ -31,28 +25,12 @@
             {{ form_widget(form.email) }}
         </p>
 
-        <div class="grid_6 alpha">
-            {{ form_errors(form.dni) }}
-            <p>
-                {{ form_label(form.dni) }}
-                {{ form_widget(form.dni) }}
-            </p>
-        </div>
-
-        <div class="grid_6 omega">
-            {{ form_errors(form.telefono) }}
-            <p>
-                {{ form_label(form.telefono) }}
-                {{ form_widget(form.telefono) }}
-            </p>
-        </div>
-
-        {{ form_errors(form.direccion) }}
+        {{ form_errors(form.roles) }}
         <p>
-            {{ form_label(form.direccion) }}
-            {{ form_widget(form.direccion) }}
-        </p>
-
+            {{ form_label(form.roles) }}
+            {{ form_widget(form.roles) }}
+        </p>        
+        
         <div class="grid_6 alpha">
             {{ form_errors(form.password.first) }}
             <p>

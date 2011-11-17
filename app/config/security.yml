@@ -30,10 +30,12 @@ security:
             users:
                 admin:     { password: d033e22ae348aeb5660fc2140aec35850c4da997, roles: 'ROLE_ADMIN' }
         user_db:
-            entity: { class: NV\ParejasBundle\Entity\Usuarios, property: email }
+            entity: { class: NV\ParejasBundle\Entity\Usuarios, property: username }
     encoders:
         Symfony\Component\Security\Core\User\User:
             algorithm:  sha1
             iterations: 1
             encode_as_base64: false
-        NV\ParejasBundle\Entity\Usuarios: sha512
+        NV\ParejasBundle\Entity\Usuarios: plaintext 
+        
+        #sha512

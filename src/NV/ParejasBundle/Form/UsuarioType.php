@@ -10,11 +10,11 @@ use NV\ParejasBundle\Validator\Constraints\DNI;
 class UsuarioType extends AbstractType{
 
     public function buildForm(FormBuilder $builder, array $options){
-        $builder->add('nombre');
-        $builder->add('apellidos');
-        $builder->add('dni', 'text', array('label' => 'DNI'));
-        $builder->add('telefono');
-        $builder->add('direccion', 'textarea');
+        $builder->add('username', 'text', array('label' => 'Nombre de usuario'));
+        $builder->add('roles', 'choice', array(
+            'choices'   => array('ROLE_ADMIN' => 'Admin', 'ROLE_USER' => 'User'),
+            'required'  => true,
+        ));
         $builder->add('email', 'email');
         $builder->add('password', 'repeated', array('type' => 'password'));
     }
