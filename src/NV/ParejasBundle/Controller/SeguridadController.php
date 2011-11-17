@@ -27,6 +27,7 @@ class SeguridadController extends Controller{
     public function registroAction(){
         
         $usuario = new Usuarios();
+        $usuario -> setUsername('Nombre de usuario');
         $form = $this->createForm(new UsuarioType, $usuario, array());
 
         $request = $this->get('request');

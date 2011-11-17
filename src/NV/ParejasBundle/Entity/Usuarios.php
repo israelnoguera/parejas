@@ -5,7 +5,7 @@ namespace NV\ParejasBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Bridge\Doctrine\Validator\Constraints as DoctrineAssert;
 
 use NV\ParejasBundle\Validator\DNI;
 
@@ -14,7 +14,8 @@ use NV\ParejasBundle\Validator\DNI;
  *
  * @ORM\Table(name="usuarios")
  * @ORM\Entity()
- * @UniqueEntity(fields="email")
+ * @DoctrineAssert\UniqueEntity(fields={"username"},message="Este valor username no está disponible")
+ * @DoctrineAssert\UniqueEntity(fields={"email"},message="Este valor email no está disponible")
  */
 class Usuarios implements UserInterface, \Serializable{
     /*
@@ -51,6 +52,7 @@ class Usuarios implements UserInterface, \Serializable{
     /**
     * @ORM\Column(type="string")
     * @Assert\NotBlank()
+    * @Assert\Regex(pattern="/^[a-zA-Z0-9\_]+$/",match=true, message="Nombre de usuario inválido")
     * @Assert\MinLength(4)
     * @Assert\MaxLength(100)
     */
@@ -58,13 +60,13 @@ class Usuarios implements UserInterface, \Serializable{
 
     /**
     * @ORM\Column(type="string")
-    * @Assert\NotBlank()
-    * @Assert\Email()
+    * @Assert\NotBlank(message="E-mail obligatorio")
+    * @Assert\Email(message="E-mail no válido")
     */
     protected $email;
 
     /**
-    * @ORM\Column(type="string")
+    * @ORM\Column(type="string", length=255)
     * @Assert\NotBlank()
     * @Assert\MinLength(5)
     * @Assert\MaxLength(10)
