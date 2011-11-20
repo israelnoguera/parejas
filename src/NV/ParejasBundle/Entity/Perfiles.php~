@@ -13,18 +13,9 @@ use Doctrine\ORM\Mapping as ORM;
 class Perfiles{   
     
     /**
-     * @ORM\ManyToOne(targetEntity="Usuarios", inversedBy="perfil")
-     * @ORM\JoinColumn(name="id_usuario", referencedColumnName="id") 
+     * @ORM\OneToOne(targetEntity="Usuarios", mappedBy="perfil")
      */
-    private $usuario; 
-    
-    public function setUsuario(\NV\ParejasBundle\Entity\Usuarios $usuario){
-        $this->usuario = $usuario;
-    }
-
-    public function getUsuario(){
-        return $this->usuario;
-    }    
+    private $usuario;    
     
     /**
      * @var integer $id
@@ -180,5 +171,4 @@ class Perfiles{
     {
         return $this->localidad;
     }
-
 }

@@ -8,6 +8,7 @@ use Symfony\Component\Security\Core\SecurityContext;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use NV\ParejasBundle\Form\UsuarioType;
 use NV\ParejasBundle\Entity\Usuarios;
+use NV\ParejasBundle\Entity\Perfiles;
 
 class SeguridadController extends Controller{
     
@@ -18,7 +19,7 @@ class SeguridadController extends Controller{
             $error = $this->get('request')->getSession()->get(SecurityContext::AUTHENTICATION_ERROR);
         }
 
-        return $this->render('NVParejasBundle:Seguridad:acceso.html.twig', array(
+        return $this->render('NVParejasBundle:Public:acceso.html.twig', array(
             'last_username' => $this->get('request')->getSession()->get(SecurityContext::LAST_USERNAME),
             'error'         => $error,
         ));        
@@ -27,7 +28,8 @@ class SeguridadController extends Controller{
     public function registroAction(){
         
         $usuario = new Usuarios();
-        $usuario -> setUsername('Nombre de usuario');
+        $perfil = new Perfiles();
+     
         $form = $this->createForm(new UsuarioType, $usuario, array());
 
         $request = $this->get('request');
@@ -41,8 +43,16 @@ class SeguridadController extends Controller{
                 $session->setFlash('notice', 'Gracias por registrarte');
 
                 // Obtenemos el usuario
-                $usuario = $form->getData();
-
+                //$form_usuario = $form->getData();
+                
+                $usuario -> setUsername('Nombre de usuario');
+                $perfil -> setUsuario($usuario);
+                
+                $perfil -> setLocalidad(4);
+                $perfil -> setProvincia(34);
+                $perfil -> setPais(36);
+                $perfil -> setTipoPerfil(2);
+                
                 
                 // Codificamos el password
                 /*
@@ -54,7 +64,8 @@ class SeguridadController extends Controller{
 
                 // Guardamos el objeto en base de datos
                 $em = $this->get('doctrine')->getEntityManager();
-                $em->persist($usuario);
+                $em->persist($perfil);
+                $em->persist($usuario);               
                 $em->flush();
 
                 // Logueamos al usuario
@@ -66,7 +77,7 @@ class SeguridadController extends Controller{
             }
         }      
         
-        return $this->render('NVParejasBundle:Seguridad:registro.html.twig', array('form' => $form->createView()));
+        return $this->render('NVParejasBundle:Public:registro.html.twig', array('form' => $form->createView()));
     }
 
     

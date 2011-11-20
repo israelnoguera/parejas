@@ -5,8 +5,6 @@ namespace NV\ParejasBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilder;
 
-use NV\ParejasBundle\Validator\Constraints\DNI;
-
 class UsuarioType extends AbstractType{
 
     public function buildForm(FormBuilder $builder, array $options){
