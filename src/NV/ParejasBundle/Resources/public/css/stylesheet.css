@@ -1,0 +1,42 @@
+#mainWrapper{
+    margin:20px auto;
+    background:blue;
+    width:1000px;
+}
+
+header{
+    position:relative;
+    height:140px;
+    background:#D3D3D3;
+}
+
+#authMenu{
+    position: absolute;
+    top:0;
+    right:0;
+    height: 24px;
+    background: #fff;
+}
+
+nav#mainMenu{
+    background:#2f2f2f;
+    position:absolute;
+    bottom: 0;
+    left:0;
+    height:24px;
+}
+
+nav#mainMenu li{
+    float:left;
+    padding:3px;
+    margin-right: 10px;
+}
+
+nav#mainMenu li .select{
+    background:green;
+}
+
+footer{
+    height:140px;
+    background:#D3D3D3;
+}

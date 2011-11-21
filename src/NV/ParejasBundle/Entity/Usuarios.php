@@ -7,8 +7,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints as DoctrineAssert;
 
-//use Doctrine\Common\Collections\ArrayCollection;
-
 
 /**
  * @ORM\Table(name="usuarios")
@@ -56,7 +54,7 @@ class Usuarios implements UserInterface, \Serializable{
     protected $roles;    
 
     public function getRoles(){
-        return array($this->roles);
+        return array('ROLE_'.$this->roles);
     }
 
     public function getSalt(){

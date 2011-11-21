@@ -8,7 +8,9 @@ use Symfony\Component\HttpFoundation\Response;
 class PortadaController extends Controller{
     
     public function indexAction(){
-        return $this->render('NVParejasBundle:Public:home.html.twig');
+        return $this->render('NVParejasBundle:Public:home.html.twig',array(
+            'mainmenu' => 'inicio'
+        ));
     }
     
 }

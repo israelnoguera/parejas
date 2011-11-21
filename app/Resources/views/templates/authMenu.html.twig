@@ -1,0 +1,19 @@
+<div id="authMenu">
+    {% if app.user %}
+        <p>Estás logueado como <strong>{{ app.user.username }}</strong></p>
+        
+        {% if is_granted('ROLE_USER') %}
+            <p>Tienes el rol de USER</p>
+        {% elseif is_granted('ROLE_PREMIUM') %}
+            <p>Tienes el rol de PREMIUM</p>
+        {% elseif is_granted('ROLE_ADMIN') %}
+            <p>Tienes el rol de ADMIN</p>
+        {% endif %}
+         
+        <p><a href="{{ path('logout') }}">Salir</a></p>
+    {% else %}
+        <a href="{{ path('acceso') }}">Iniciar sesión</a>     
+        
+    {% endif %}    
+
+</div>

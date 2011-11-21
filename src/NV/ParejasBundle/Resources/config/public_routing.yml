@@ -6,6 +6,10 @@ acceso:
     pattern:  /acceso
     defaults: { _controller: NVParejasBundle:Seguridad:acceso }
 
+bienvenido:
+    pattern:  /bienvenido
+    defaults: { _controller: NVParejasBundle:Seguridad:bienvenido }
+
 acceso_check:
     pattern:  /acceso_check
 

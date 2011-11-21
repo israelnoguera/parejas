@@ -20,6 +20,7 @@ class SeguridadController extends Controller{
         }
 
         return $this->render('NVParejasBundle:Public:acceso.html.twig', array(
+            'mainmenu'      => 'acceso',
             'last_username' => $this->get('request')->getSession()->get(SecurityContext::LAST_USERNAME),
             'error'         => $error,
         ));        
@@ -28,6 +29,7 @@ class SeguridadController extends Controller{
     public function registroAction(){
         
         $usuario = new Usuarios();
+        $usuario -> setUsername('Nombre de usuario');
         $perfil = new Perfiles();
      
         $form = $this->createForm(new UsuarioType, $usuario, array());
@@ -44,8 +46,7 @@ class SeguridadController extends Controller{
 
                 // Obtenemos el usuario
                 //$form_usuario = $form->getData();
-                
-                $usuario -> setUsername('Nombre de usuario');
+
                 $perfil -> setUsuario($usuario);                
                 $perfil -> setLocalidad(4);
                 $perfil -> setProvincia(34);
@@ -71,13 +72,17 @@ class SeguridadController extends Controller{
                 $token = new UsernamePasswordToken($usuario, null, 'main', $usuario->getRoles());
                 $this->get('security.context')->setToken($token);
 
-                return $this->redirect($this->generateUrl('portada'));
+                return $this->redirect($this->generateUrl('bienvenido'));
 
             }
         }      
         
         return $this->render('NVParejasBundle:Public:registro.html.twig', array('form' => $form->createView()));
     }
+    
+    public function bienvenidoAction(){
+        return $this->render('NVParejasBundle:Public:bienvenido.html.twig');
+    }    
 
     
 }

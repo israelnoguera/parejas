@@ -10,7 +10,7 @@ class UsuarioType extends AbstractType{
     public function buildForm(FormBuilder $builder, array $options){
         $builder->add('username', 'text', array('label' => 'Nombre de usuario'));
         $builder->add('roles', 'choice', array(
-            'choices'   => array('ROLE_ADMIN' => 'Admin', 'ROLE_USER' => 'Usuario estándar', 'ROLE_PREMIUM' => 'Usuario Premium'),
+            'choices'   => array('ADMIN' => 'Admin', 'USER' => 'Usuario estándar', 'PREMIUM' => 'Usuario Premium'),
             'required'  => true,
         ));
         $builder->add('email', 'email');
