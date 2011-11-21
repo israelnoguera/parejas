@@ -16,21 +16,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints as DoctrineAssert;
  * @DoctrineAssert\UniqueEntity(fields={"username"},message="El nombre de usuario no está disponible")
  * @DoctrineAssert\UniqueEntity(fields={"email"},message="El email indicado no está disponible")
  */
-class Usuarios implements UserInterface, \Serializable{
-    
-    /**
-    * @ORM\OneToOne(targetEntity="Perfiles", mappedBy="usuario")
-    */
-    protected $perfiles;
-    
-    
-    public function setPerfiles(\NV\ParejasBundle\Entity\Perfiles $perfiles){
-        $this->perfiles = $perfiles;
-    }
-
-    public function getPerfiles(){
-        return $this->perfiles;
-    }    
+class Usuarios implements UserInterface, \Serializable{ 
     
     /**
      * @ORM\Id

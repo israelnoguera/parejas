@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Perfiles{          
     
     /**
-     * @ORM\OneToOne(targetEntity="Usuarios", inversedBy="perfiles")
+     * @ORM\OneToOne(targetEntity="Usuarios")
      * @ORM\JoinColumn(name="usuario_id", referencedColumnName="id") 
      */
     protected $usuario;    

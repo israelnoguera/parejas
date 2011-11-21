@@ -46,8 +46,7 @@ class SeguridadController extends Controller{
                 //$form_usuario = $form->getData();
                 
                 $usuario -> setUsername('Nombre de usuario');
-                $perfil ->setUsuario($usuario);
-                
+                $perfil -> setUsuario($usuario);                
                 $perfil -> setLocalidad(4);
                 $perfil -> setProvincia(34);
                 $perfil -> setPais(36);
