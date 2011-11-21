@@ -7,6 +7,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints as DoctrineAssert;
 
+//use Doctrine\Common\Collections\ArrayCollection;
+
+
 /**
  * @ORM\Table(name="usuarios")
  * @ORM\Entity()
@@ -14,12 +17,20 @@ use Symfony\Bridge\Doctrine\Validator\Constraints as DoctrineAssert;
  * @DoctrineAssert\UniqueEntity(fields={"email"},message="El email indicado no está disponible")
  */
 class Usuarios implements UserInterface, \Serializable{
-
+    
     /**
-    * @ORM\OneToOne(targetEntity="Perfiles", inversedBy="id_usuario")
-    * @ORM\JoinColumn(name="id", referencedColumnName="id_usuario") 
+    * @ORM\OneToOne(targetEntity="Perfiles", mappedBy="usuario")
     */
-    private $perfil;        
+    protected $perfiles;
+    
+    
+    public function setPerfiles(\NV\ParejasBundle\Entity\Perfiles $perfiles){
+        $this->perfiles = $perfiles;
+    }
+
+    public function getPerfiles(){
+        return $this->perfiles;
+    }    
     
     /**
      * @ORM\Id
@@ -151,5 +162,5 @@ class Usuarios implements UserInterface, \Serializable{
     public function setRoles($roles){
         $this->roles = $roles;
     }
-    
+
 }

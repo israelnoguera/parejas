@@ -10,13 +10,13 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table()
  * @ORM\Entity
  */
-class Perfiles{   
+class Perfiles{          
     
     /**
-     * @ORM\ManyToOne(targetEntity="Usuarios", inversedBy="perfil")
-     * @ORM\JoinColumn(name="id_usuario", referencedColumnName="id") 
+     * @ORM\OneToOne(targetEntity="Usuarios", inversedBy="perfiles")
+     * @ORM\JoinColumn(name="usuario_id", referencedColumnName="id") 
      */
-    private $usuario; 
+    protected $usuario;    
     
     public function setUsuario(\NV\ParejasBundle\Entity\Usuarios $usuario){
         $this->usuario = $usuario;
@@ -33,42 +33,35 @@ class Perfiles{
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
-
-    /**
-     * @var integer $id_usuario
-     *
-     * @ORM\Column(name="id_usuario", type="integer")
-     */
-    private $id_usuario;
+    protected $id;
 
     /**
      * @var integer $provincia
      *
      * @ORM\Column(name="provincia", type="integer")
      */
-    private $provincia;
+    protected $provincia;
 
     /**
      * @var integer $pais
      *
      * @ORM\Column(name="pais", type="integer")
      */
-    private $pais;
+    protected $pais;
 
     /**
      * @var smallint $tipo_perfil
      *
      * @ORM\Column(name="tipo_perfil", type="smallint")
      */
-    private $tipo_perfil;
+    protected $tipo_perfil;
 
     /**
      * @var integer $localidad
      *
      * @ORM\Column(name="localidad", type="integer")
      */
-    private $localidad;
+    protected $localidad;
 
 
     /**
@@ -81,25 +74,6 @@ class Perfiles{
         return $this->id;
     }
 
-    /**
-     * Set id_usuario
-     *
-     * @param integer $idUsuario
-     */
-    public function setIdUsuario($idUsuario)
-    {
-        $this->id_usuario = $idUsuario;
-    }
-
-    /**
-     * Get id_usuario
-     *
-     * @return integer 
-     */
-    public function getIdUsuario()
-    {
-        return $this->id_usuario;
-    }
 
     /**
      * Set provincia
