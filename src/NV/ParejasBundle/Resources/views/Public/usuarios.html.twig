@@ -1,0 +1,22 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+
+    {% if usuarios|length > 0 %}
+        <section>
+            <h1>Listado de usuarios registrados</h1>            
+            {% for usuario in usuarios %}
+                <ul class='floatlist'>
+                <li>{{ usuario.id }}</li>
+                <li>{{ usuario.username }}</li>
+                <li>{{ usuario.email }}</li>
+                <li>{{ usuario.password }}</li>
+                <li>{{ usuario.roles[0] | replace({'ROLE_':''}) | capitalize }}</li>
+                </ul>
+            {% endfor %}            
+        </section>
+    {% else %}
+        <p>No ha usuarios registrados</p>    
+    {% endif %}
+            
+{% endblock body %}

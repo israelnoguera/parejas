@@ -20,23 +20,26 @@
     </head>
     <body>
         <div id="mainWrapper">
+            <header>
             {% block header %}
-                <header>                
-                    {% include ':templates:mainMenu.html.twig' %}
-                    {% include ':templates:authMenu.html.twig' %}
-                    {% include ':templates:search.html.twig' %}                
-                </header>
+                <h1>Parejas.com</h1>
+                {% include ':templates:mainMenu.html.twig' %}
+                {% include ':templates:authMenu.html.twig' %}
+                {% include ':templates:search.html.twig' %}                                
             {% endblock header %}
-            {% block body %}
-                <div id="body">
-                    BODY                
-                </div>
-            {% endblock body %}          
-            {% block footer %}
-                <footer>
-                    FOOTER
-                </footer>
+            </header>
+                
+            <div id="body">
+            {% block body %}                
+                BODY                                
+            {% endblock body %}         
+            </div>
+                
+            <footer>    
+            {% block footer %}                
+                FOOTER    
             {% endblock footer %}          
+            </footer>                    
         </div>
     </body>
 </html>

@@ -1,6 +1,6 @@
 {% extends '::base.html.twig' %}
 
-{% block cuerpo %}
+{% block body %}
     <h1>Registro</h1>
 
     {% if( app.session.flash('notice') ) %}
@@ -52,4 +52,4 @@
         <input type="submit" value="Regístrate" />
     </form>
     
-{% endblock cuerpo %}
+{% endblock body %}
