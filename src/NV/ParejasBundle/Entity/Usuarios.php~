@@ -7,12 +7,10 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints as DoctrineAssert;
 
-//use Doctrine\Common\Collections\ArrayCollection;
-
 
 /**
  * @ORM\Table(name="usuarios")
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="NV\ParejasBundle\Repository\UsuariosRepository")
  * @DoctrineAssert\UniqueEntity(fields={"username"},message="El nombre de usuario no está disponible")
  * @DoctrineAssert\UniqueEntity(fields={"email"},message="El email indicado no está disponible")
  */
@@ -35,7 +33,7 @@ class Usuarios implements UserInterface, \Serializable{
     protected $username;
 
     /**
-    * @ORM\Column(type="string")
+    * @ORM\Column(type="string",columnDefinition="VARCHAR(100) NOT NULL")
     * @Assert\NotBlank(message="E-mail obligatorio")
     * @Assert\Email(message="E-mail no válido")
     */
@@ -55,8 +53,30 @@ class Usuarios implements UserInterface, \Serializable{
     */
     protected $roles;    
 
+    /**
+    * @ORM\Column(type="integer",length=1)
+    * @Assert\NotBlank()
+    */
+    protected $state = 1;  
+    
+    /**
+    * @ORM\Column(type="datetime")
+    * @Assert\NotBlank()
+    */
+    protected $fh_alta;     
+    
+    /**
+    * @ORM\Column(type="datetime",nullable=true)
+    * @Assert\NotBlank()
+    */
+    protected $fh_ult_acceso;    
+    
+    public function __construct(){
+        $this->fh_alta = new \DateTime("now");
+    }
+    
     public function getRoles(){
-        return array($this->roles);
+        return array('ROLE_'.$this->roles);
     }
 
     public function getSalt(){
@@ -86,65 +106,30 @@ class Usuarios implements UserInterface, \Serializable{
         $this->setUsername($arr[0]);
     }
 
-    /**
-     * Get id
-     *
-     * @return integer $id
-     */
     public function getId(){
         return $this->id;
     }
 
-    /**
-     * Set email
-     *
-     * @param string $email
-     */
     public function setEmail($email){
         $this->email = $email;
     }
 
-    /**
-     * Get email
-     *
-     * @return string $email
-     */
     public function getEmail(){
         return $this->email;
     }
 
-    /**
-     * Set password
-     *
-     * @param string $password
-     */
     public function setPassword($password){
         $this->password = $password;
     }
 
-    /**
-     * Get password
-     *
-     * @return string $password
-     */
     public function getPassword(){
         return $this->password;
     }
 
-    /**
-     * Set username
-     *
-     * @param string $username
-     */
     public function setUsername($username){
         $this->username = $username;
     }
 
-    /**
-     * Set roles
-     *
-     * @param string $roles
-     */
     public function setRoles($roles){
         $this->roles = $roles;
     }

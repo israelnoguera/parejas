@@ -10,7 +10,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints as DoctrineAssert;
 
 /**
  * @ORM\Table(name="usuarios")
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="NV\ParejasBundle\Repository\UsuariosRepository")
  * @DoctrineAssert\UniqueEntity(fields={"username"},message="El nombre de usuario no está disponible")
  * @DoctrineAssert\UniqueEntity(fields={"email"},message="El email indicado no está disponible")
  */
@@ -24,7 +24,7 @@ class Usuarios implements UserInterface, \Serializable{
     protected $id;
 
     /**
-    * @ORM\Column(type="string")
+    * @ORM\Column(type="string",length=100)
     * @Assert\NotBlank()
     * @Assert\Regex(pattern="/^[a-zA-Z0-9\_\-\.]+$/",match=true, message="Nombre de usuario inválido")
     * @Assert\MinLength(4)
@@ -33,14 +33,14 @@ class Usuarios implements UserInterface, \Serializable{
     protected $username;
 
     /**
-    * @ORM\Column(type="string")
+    * @ORM\Column(type="string",length=100)
     * @Assert\NotBlank(message="E-mail obligatorio")
     * @Assert\Email(message="E-mail no válido")
     */
     protected $email;
 
     /**
-    * @ORM\Column(type="string", length=255)
+    * @ORM\Column(type="string", length=100)
     * @Assert\NotBlank()
     * @Assert\MinLength(5)
     * @Assert\MaxLength(10)
@@ -48,11 +48,32 @@ class Usuarios implements UserInterface, \Serializable{
     protected $password;
     
     /**
-    * @ORM\Column(type="string")
+    * @ORM\Column(type="string", length=40)
     * @Assert\NotBlank()
     */
     protected $roles;    
 
+    /**
+    * @ORM\Column(type="integer",columnDefinition="TINYINT(1) NULL")
+    * @Assert\NotBlank()
+    */
+    protected $state;  
+    
+    /**
+    * @ORM\Column(type="datetime")    
+    */
+    protected $fh_alta;     
+    
+    /**
+    * @ORM\Column(type="datetime")    
+    */
+    protected $fh_ult_acceso;    
+    
+    public function __construct(){
+        $this->fh_alta = new \DateTime("now");
+        $this->state = 1;
+    }
+    
     public function getRoles(){
         return array('ROLE_'.$this->roles);
     }
@@ -84,67 +105,92 @@ class Usuarios implements UserInterface, \Serializable{
         $this->setUsername($arr[0]);
     }
 
-    /**
-     * Get id
-     *
-     * @return integer $id
-     */
     public function getId(){
         return $this->id;
     }
 
-    /**
-     * Set email
-     *
-     * @param string $email
-     */
     public function setEmail($email){
         $this->email = $email;
     }
 
-    /**
-     * Get email
-     *
-     * @return string $email
-     */
     public function getEmail(){
         return $this->email;
     }
 
-    /**
-     * Set password
-     *
-     * @param string $password
-     */
     public function setPassword($password){
         $this->password = $password;
     }
 
-    /**
-     * Get password
-     *
-     * @return string $password
-     */
     public function getPassword(){
         return $this->password;
     }
 
-    /**
-     * Set username
-     *
-     * @param string $username
-     */
     public function setUsername($username){
         $this->username = $username;
     }
 
-    /**
-     * Set roles
-     *
-     * @param string $roles
-     */
     public function setRoles($roles){
         $this->roles = $roles;
     }
 
+
+    /**
+     * Set state
+     *
+     * @param integer $state
+     */
+    public function setState($state)
+    {
+        $this->state = $state;
+    }
+
+    /**
+     * Get state
+     *
+     * @return integer 
+     */
+    public function getState()
+    {
+        return $this->state;
+    }
+
+    /**
+     * Set fh_alta
+     *
+     * @param datetime $fhAlta
+     */
+    public function setFhAlta($fhAlta)
+    {
+        $this->fh_alta = $fhAlta;
+    }
+
+    /**
+     * Get fh_alta
+     *
+     * @return datetime 
+     */
+    public function getFhAlta()
+    {
+        return $this->fh_alta;
+    }
+
+    /**
+     * Set fh_ult_acceso
+     *
+     * @param datetime $fhUltAcceso
+     */
+    public function setFhUltAcceso($fhUltAcceso)
+    {
+        $this->fh_ult_acceso = $fhUltAcceso;
+    }
+
+    /**
+     * Get fh_ult_acceso
+     *
+     * @return datetime 
+     */
+    public function getFhUltAcceso()
+    {
+        return $this->fh_ult_acceso;
+    }
 }

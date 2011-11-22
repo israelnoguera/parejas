@@ -8,22 +8,11 @@ class UsuariosController extends Controller{
     
     public function indexAction(){
         
-        /*
-        $usuarios = $this->getDoctrine()
-            ->getRepository('NVParejasBundle:Usuarios')
-            ->findAll();
-        */
-        
-        $repositorio = $this->getDoctrine()->getRepository('NVParejasBundle:Usuarios');
-        
-        $consulta = $repositorio ->createQueryBuilder('p')
-                ->where('p.username != :value ')
-                ->setParameter('value', '')
-                ->orderBy('p.id','DESC')
-                ->getQuery();
-        
-        $usuarios = $consulta->getResult();
-        
+        //CONSULTA MEDIANTE DQL Y REPOSITORIO (metodo aconsejado)
+        $em = $this->getDoctrine()->getEntityManager();
+        $usuarios = $em->getRepository('NVParejasBundle:Usuarios')
+            ->findAllOrderedByName();
+
         $arrParams = array(
             'mainmenu' => 'usuarios',
             'usuarios' => $usuarios
