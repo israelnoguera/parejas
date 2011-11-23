@@ -16,6 +16,12 @@ use Symfony\Bridge\Doctrine\Validator\Constraints as DoctrineAssert;
  */
 class Usuarios implements UserInterface, \Serializable{ 
     
+    
+    /**
+     * @ORM\OneToOne(targetEntity="Perfiles", mappedBy="usuario")
+     */
+    protected $perfiles;  
+    
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
@@ -24,7 +30,7 @@ class Usuarios implements UserInterface, \Serializable{
     protected $id;
 
     /**
-    * @ORM\Column(type="string")
+    * @ORM\Column(type="string",length=100)
     * @Assert\NotBlank()
     * @Assert\Regex(pattern="/^[a-zA-Z0-9\_\-\.]+$/",match=true, message="Nombre de usuario inválido")
     * @Assert\MinLength(4)
@@ -33,14 +39,14 @@ class Usuarios implements UserInterface, \Serializable{
     protected $username;
 
     /**
-    * @ORM\Column(type="string",columnDefinition="VARCHAR(100) NOT NULL")
+    * @ORM\Column(type="string",length=100)
     * @Assert\NotBlank(message="E-mail obligatorio")
     * @Assert\Email(message="E-mail no válido")
     */
     protected $email;
 
     /**
-    * @ORM\Column(type="string", length=255)
+    * @ORM\Column(type="string", length=100)
     * @Assert\NotBlank()
     * @Assert\MinLength(5)
     * @Assert\MaxLength(10)
@@ -48,31 +54,30 @@ class Usuarios implements UserInterface, \Serializable{
     protected $password;
     
     /**
-    * @ORM\Column(type="string")
+    * @ORM\Column(type="string", length=40)
     * @Assert\NotBlank()
     */
     protected $roles;    
 
     /**
-    * @ORM\Column(type="integer",length=1)
+    * @ORM\Column(type="integer",columnDefinition="TINYINT(1) NULL")
     * @Assert\NotBlank()
     */
-    protected $state = 1;  
+    protected $state;  
     
     /**
-    * @ORM\Column(type="datetime")
-    * @Assert\NotBlank()
+    * @ORM\Column(type="datetime")    
     */
     protected $fh_alta;     
     
     /**
-    * @ORM\Column(type="datetime",nullable=true)
-    * @Assert\NotBlank()
+    * @ORM\Column(type="datetime")    
     */
-    protected $fh_ult_acceso;    
+    protected $fh_ult_acceso;      
     
     public function __construct(){
         $this->fh_alta = new \DateTime("now");
+        $this->state = 1;
     }
     
     public function getRoles(){
@@ -82,7 +87,7 @@ class Usuarios implements UserInterface, \Serializable{
     public function getSalt(){
         return false;
     }
-
+    
     public function getUsername(){
         return $this->username;
     }
@@ -108,8 +113,8 @@ class Usuarios implements UserInterface, \Serializable{
 
     public function getId(){
         return $this->id;
-    }
-
+    }    
+    
     public function setEmail($email){
         $this->email = $email;
     }
@@ -134,4 +139,94 @@ class Usuarios implements UserInterface, \Serializable{
         $this->roles = $roles;
     }
 
+
+    /**
+     * Set state
+     *
+     * @param integer $state
+     */
+    public function setState($state)
+    {
+        $this->state = $state;
+    }
+
+    /**
+     * Get state
+     *
+     * @return integer 
+     */
+    public function getState()
+    {
+        return $this->state;
+    }
+
+    /**
+     * Set fh_alta
+     *
+     * @param datetime $fhAlta
+     */
+    public function setFhAlta($fhAlta)
+    {
+        $this->fh_alta = $fhAlta;
+    }
+
+    /**
+     * Get fh_alta
+     *
+     * @return datetime 
+     */
+    public function getFhAlta()
+    {
+        return $this->fh_alta;
+    }
+
+    /**
+     * Set fh_ult_acceso
+     *
+     * @param datetime $fhUltAcceso
+     */
+    public function setFhUltAcceso($fhUltAcceso)
+    {
+        $this->fh_ult_acceso = $fhUltAcceso;
+    }
+
+    /**
+     * Get fh_ult_acceso
+     *
+     * @return datetime 
+     */
+    public function getFhUltAcceso()
+    {
+        return $this->fh_ult_acceso;
+    }
+    
+    public function setPais($pais)
+    {
+        
+    }
+
+    public function getPais()
+    {
+        
+    }    
+    
+    public function setProvincia($pais)
+    {
+        
+    }
+
+    public function getProvincia()
+    {
+        
+    }  
+
+    public function setLocalidad($pais)
+    {
+        
+    }
+
+    public function getLocalidad()
+    {
+        
+    }      
 }

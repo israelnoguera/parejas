@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Perfiles{          
     
     /**
-     * @ORM\OneToOne(targetEntity="Usuarios")
+     * @ORM\OneToOne(targetEntity="Usuarios", inversedBy="perfiles")
      * @ORM\JoinColumn(name="usuario_id", referencedColumnName="id") 
      */
     protected $usuario;    
@@ -61,9 +61,8 @@ class Perfiles{
      *
      * @ORM\Column(name="localidad", type="integer")
      */
-    protected $localidad;
-
-
+    protected $localidad;   
+    
     /**
      * Get id
      *

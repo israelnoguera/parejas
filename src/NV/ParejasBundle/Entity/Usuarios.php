@@ -16,6 +16,12 @@ use Symfony\Bridge\Doctrine\Validator\Constraints as DoctrineAssert;
  */
 class Usuarios implements UserInterface, \Serializable{ 
     
+    
+    /**
+     * @ORM\OneToOne(targetEntity="Perfiles", mappedBy="usuario")
+     */
+    protected $perfiles;  
+    
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
@@ -65,9 +71,9 @@ class Usuarios implements UserInterface, \Serializable{
     protected $fh_alta;     
     
     /**
-    * @ORM\Column(type="datetime")    
+    * @ORM\Column(type="datetime",nullable=true)    
     */
-    protected $fh_ult_acceso;    
+    protected $fh_ult_acceso;      
     
     public function __construct(){
         $this->fh_alta = new \DateTime("now");
@@ -81,7 +87,7 @@ class Usuarios implements UserInterface, \Serializable{
     public function getSalt(){
         return false;
     }
-
+    
     public function getUsername(){
         return $this->username;
     }
@@ -107,8 +113,8 @@ class Usuarios implements UserInterface, \Serializable{
 
     public function getId(){
         return $this->id;
-    }
-
+    }    
+    
     public function setEmail($email){
         $this->email = $email;
     }
@@ -192,5 +198,55 @@ class Usuarios implements UserInterface, \Serializable{
     public function getFhUltAcceso()
     {
         return $this->fh_ult_acceso;
+    }
+    
+    public function setPais($pais)
+    {
+        
+    }
+
+    public function getPais()
+    {
+        
+    }    
+    
+    public function setProvincia($pais)
+    {
+        
+    }
+
+    public function getProvincia()
+    {
+        
+    }  
+
+    public function setLocalidad($pais)
+    {
+        
+    }
+
+    public function getLocalidad()
+    {
+        
+    }      
+
+    /**
+     * Set perfiles
+     *
+     * @param NV\ParejasBundle\Entity\Perfiles $perfiles
+     */
+    public function setPerfiles(\NV\ParejasBundle\Entity\Perfiles $perfiles)
+    {
+        $this->perfiles = $perfiles;
+    }
+
+    /**
+     * Get perfiles
+     *
+     * @return NV\ParejasBundle\Entity\Perfiles 
+     */
+    public function getPerfiles()
+    {
+        return $this->perfiles;
     }
 }

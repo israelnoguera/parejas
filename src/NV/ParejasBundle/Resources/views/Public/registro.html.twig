@@ -29,7 +29,25 @@
         <p>
             {{ form_label(form.roles) }}
             {{ form_widget(form.roles) }}
-        </p>        
+        </p>   
+        
+        {{ form_errors(form.pais) }}
+        <p>
+            {{ form_label(form.pais) }}
+            {{ form_widget(form.pais) }}
+        </p> 
+        
+        {{ form_errors(form.provincia) }}
+        <p>
+            {{ form_label(form.provincia) }}
+            {{ form_widget(form.provincia) }}
+        </p>
+        
+        {{ form_errors(form.localidad) }}
+        <p>
+            {{ form_label(form.localidad) }}
+            {{ form_widget(form.localidad) }}
+        </p>         
         
         <div class="grid_6 alpha">
             {{ form_errors(form.password.first) }}
