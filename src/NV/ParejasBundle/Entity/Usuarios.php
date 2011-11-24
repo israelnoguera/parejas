@@ -18,7 +18,7 @@ class Usuarios implements UserInterface, \Serializable{
     
     
     /**
-     * @ORM\OneToOne(targetEntity="Perfiles", mappedBy="usuario", cascade={"persist"})
+     * @ORM\OneToOne(targetEntity="Perfiles", mappedBy="usuario")
      */
     protected $perfiles;  
     

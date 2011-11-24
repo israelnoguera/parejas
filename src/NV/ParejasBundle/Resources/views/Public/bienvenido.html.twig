@@ -2,4 +2,9 @@
 
 {% block body %}
     <h1>bienvenido a parejas.com!</h1>
+    
+    {% if app.session.hasFlash('notice') %}
+        {{ app.session.flash('notice') }}
+    {% endif %}
+    
 {% endblock body %}
