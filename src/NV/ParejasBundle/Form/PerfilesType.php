@@ -13,8 +13,8 @@ class PerfilesType extends AbstractType{
         
         $builder
             ->add('pais', 'entity', array(
-            'class' => 'NVParejasBundle:Perfiles',
-            'property' => 'pais',
+            'class' => 'NVParejasBundle:Paises',
+            'property' => 'pais', 
             'label'=>'Pais:'))
             ->add('provincia', 'choice', array(
                     'choices'   => array('1' => '1', '2' => '2', '3' => '3'),

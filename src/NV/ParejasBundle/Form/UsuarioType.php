@@ -12,14 +12,14 @@ class UsuarioType extends AbstractType{
     public function buildForm(FormBuilder $builder, array $options){
         
         $builder
-                ->add('username', 'text', array('label' => 'Nombre de usuario'))
-                ->add('roles', 'choice', array(
-                    'choices'   => array('ADMIN' => 'Admin', 'USER' => 'Usuario estándar', 'PREMIUM' => 'Usuario Premium'),
-                    'required'  => true,
-                    ))
-                ->add('email', 'email')
-                ->add('password', 'repeated', array('type' => 'password'))
-                ->add('perfiles', new PerfilesType());
+            ->add('username', 'text', array('label' => 'Nombre de usuario'))
+            ->add('roles', 'choice', array(
+                'choices'   => array('ADMIN' => 'Admin', 'USER' => 'Usuario estándar', 'PREMIUM' => 'Usuario Premium'),
+                'required'  => true,
+                ))
+            ->add('email', 'email')
+            ->add('password', 'repeated', array('type' => 'password'))
+            ->add('perfiles', new PerfilesType());
         
     }
 
