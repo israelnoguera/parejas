@@ -14,7 +14,6 @@ class Perfiles{
     
     /**
      * @ORM\OneToOne(targetEntity="Usuarios", inversedBy="perfiles")
-     * @ORM\JoinColumn(name="usuario_id", referencedColumnName="id") 
      */
     protected $usuario;    
     

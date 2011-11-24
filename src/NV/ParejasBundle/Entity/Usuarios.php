@@ -18,7 +18,7 @@ class Usuarios implements UserInterface, \Serializable{
     
     
     /**
-     * @ORM\OneToOne(targetEntity="Perfiles", mappedBy="usuario")
+     * @ORM\OneToOne(targetEntity="Perfiles", mappedBy="usuario", cascade={"persist"})
      */
     protected $perfiles;  
     
@@ -198,36 +198,6 @@ class Usuarios implements UserInterface, \Serializable{
     public function getFhUltAcceso()
     {
         return $this->fh_ult_acceso;
-    }
-    
-    public function setPais($pais)
-    {
-        
-    }
-
-    public function getPais()
-    {
-        
-    }    
-    
-    public function setProvincia($pais)
-    {
-        
-    }
-
-    public function getProvincia()
-    {
-        
-    }  
-
-    public function setLocalidad($pais)
-    {
-        
-    }
-
-    public function getLocalidad()
-    {
-        
     }      
 
     /**

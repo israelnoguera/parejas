@@ -28,30 +28,31 @@ class SeguridadController extends Controller{
     
     public function registroAction(){
         
-        $usuario = new Usuarios();
-        $usuario -> setUsername('Nombre de usuario');
-        $perfil = new Perfiles();
+        $usuario = new Usuarios();        
      
-        $form = $this->createForm(new UsuarioType, $usuario, array());
+        $form = $this->createForm(new UsuarioType(), $usuario);
 
         $request = $this->get('request');
-        if ($request->getMethod() == 'POST') {
+        if ($request->getMethod() == 'POST') {            
+            
             $form->bindRequest($request);
 
             if ($form->isValid()) {
 
                 // Mensaje para notificar al usuario que todo ha salido bien
-                $session = $this->get('request')->getSession();
-                $session->setFlash('notice', 'Gracias por registrarte');
+                //$session = $this->get('request')->getSession();
+                //$session->setFlash('notice', 'Gracias por registrarte');
 
                 // Obtenemos el usuario
                 //$form_usuario = $form->getData();
 
+                //Sino incio el objeto perfil y no lo persisto, solo se hace un insert, pero no se pasa el id de usuario
+                $perfil = new Perfiles();
                 $perfil -> setUsuario($usuario);                
-                $perfil -> setLocalidad($usuario->getLocalidad());
-                $perfil -> setProvincia($usuario->getProvincia());
-                $perfil -> setPais($usuario->getPais());
-                $perfil -> setTipoPerfil(2);
+                $perfil -> setLocalidad($usuario ->getPerfiles()->getLocalidad());
+                $perfil -> setProvincia($usuario ->getPerfiles()->getProvincia());
+                $perfil -> setPais($usuario ->getPerfiles()->getPais());
+                $perfil -> setTipoPerfil($usuario ->getPerfiles()->getTipoPerfil());
                 
                 
                 // Codificamos el password
@@ -64,15 +65,15 @@ class SeguridadController extends Controller{
 
                 // Guardamos el objeto en base de datos
                 $em = $this->get('doctrine')->getEntityManager();
-                $em->persist($perfil);
-                $em->persist($usuario);               
+                $em->persist($usuario);
+                $em->persist($perfil);                               
                 $em->flush();
 
                 // Logueamos al usuario
                 $token = new UsernamePasswordToken($usuario, null, 'main', $usuario->getRoles());
                 $this->get('security.context')->setToken($token);
 
-                return $this->redirect($this->generateUrl('bienvenido'));
+                //return $this->redirect($this->generateUrl('bienvenido'));
 
             }
         }      

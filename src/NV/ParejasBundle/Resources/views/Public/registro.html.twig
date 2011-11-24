@@ -31,23 +31,31 @@
             {{ form_widget(form.roles) }}
         </p>   
         
-        {{ form_errors(form.pais) }}
+        
+        {{ form_errors(form.perfiles.pais) }}
         <p>
-            {{ form_label(form.pais) }}
-            {{ form_widget(form.pais) }}
+            {{ form_label(form.perfiles.pais) }}
+            {{ form_widget(form.perfiles.pais) }}
         </p> 
         
-        {{ form_errors(form.provincia) }}
+        {{ form_errors(form.perfiles.provincia) }}
         <p>
-            {{ form_label(form.provincia) }}
-            {{ form_widget(form.provincia) }}
+            {{ form_label(form.perfiles.provincia) }}
+            {{ form_widget(form.perfiles.provincia) }}
         </p>
         
-        {{ form_errors(form.localidad) }}
+        {{ form_errors(form.perfiles.localidad) }}
         <p>
-            {{ form_label(form.localidad) }}
-            {{ form_widget(form.localidad) }}
-        </p>         
+            {{ form_label(form.perfiles.localidad) }}
+            {{ form_widget(form.perfiles.localidad) }}
+        </p>
+        
+        {{ form_errors(form.perfiles.tipo_perfil) }}
+        <p>
+            {{ form_label(form.perfiles.tipo_perfil) }}
+            {{ form_widget(form.perfiles.tipo_perfil) }}
+        </p>        
+        
         
         <div class="grid_6 alpha">
             {{ form_errors(form.password.first) }}

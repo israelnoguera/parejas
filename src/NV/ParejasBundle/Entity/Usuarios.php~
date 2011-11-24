@@ -71,7 +71,7 @@ class Usuarios implements UserInterface, \Serializable{
     protected $fh_alta;     
     
     /**
-    * @ORM\Column(type="datetime")    
+    * @ORM\Column(type="datetime",nullable=true)    
     */
     protected $fh_ult_acceso;      
     
@@ -198,35 +198,25 @@ class Usuarios implements UserInterface, \Serializable{
     public function getFhUltAcceso()
     {
         return $this->fh_ult_acceso;
-    }
-    
-    public function setPais($pais)
-    {
-        
-    }
-
-    public function getPais()
-    {
-        
-    }    
-    
-    public function setProvincia($pais)
-    {
-        
-    }
-
-    public function getProvincia()
-    {
-        
-    }  
-
-    public function setLocalidad($pais)
-    {
-        
-    }
-
-    public function getLocalidad()
-    {
-        
     }      
+
+    /**
+     * Set perfiles
+     *
+     * @param NV\ParejasBundle\Entity\Perfiles $perfiles
+     */
+    public function setPerfiles(\NV\ParejasBundle\Entity\Perfiles $perfiles)
+    {
+        $this->perfiles = $perfiles;
+    }
+
+    /**
+     * Get perfiles
+     *
+     * @return NV\ParejasBundle\Entity\Perfiles 
+     */
+    public function getPerfiles()
+    {
+        return $this->perfiles;
+    }
 }
