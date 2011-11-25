@@ -9,3 +9,7 @@ public:
 #admin:
 #    resource: "@NVParejasBundle/Resources/config/admin_routing.yml"
 #    prefix:   /    
+
+webservices:
+    resource: "@NVParejasBundle/Resources/config/webservices_routing.yml"
+    prefix: /webservices

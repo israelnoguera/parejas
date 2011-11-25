@@ -17,11 +17,11 @@ class PerfilesType extends AbstractType{
             'property' => 'pais', 
             'label'=>'Pais:'))
             ->add('provincia', 'choice', array(
-                    'choices'   => array('1' => '1', '2' => '2', '3' => '3'),
+                    'choices'   => array('' => 'Selecciona un pais'),
                     'required'  => true,            
                 ))
             ->add('localidad', 'choice', array(
-                    'choices'   => array('1' => '1', '2' => '2', '3' => '3'),
+                    'choices'   => array('' => 'Selecciona una provincia'),
                     'required'  => true,            
                 ))
             ->add('tipo_perfil', 'text', array('label' => 'Tipo de perfil'));

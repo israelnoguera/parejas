@@ -1,0 +1,3 @@
+webservices_getProvinciasByIdPais:
+    pattern:  /getProvinciasByIdPais
+    defaults: { _controller: NVParejasBundle:Webservices:getProvinciasByIdPais }
