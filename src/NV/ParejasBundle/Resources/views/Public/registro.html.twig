@@ -11,7 +11,7 @@
 
     {{ form_errors(form) }}
 
-    <form action="{{ path('registro') }}" method="post" {{ form_enctype(form) }}>
+    <form id="registroForm" action="{{ path('registro') }}" method="post" {{ form_enctype(form) }}>
 
         {{ form_errors(form.username) }}
         <p>

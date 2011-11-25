@@ -7,25 +7,28 @@ use Symfony\Component\HttpFoundation\Response;
 
 class WebservicesController extends Controller{
     
+    public function getPaisesAction(){       
+
+        $em = $this->getDoctrine()->getEntityManager();
+        $paises = $em->getRepository('NVParejasBundle:Paises')
+            ->findAllPaises();            
+
+        $return = json_encode($paises);
+        return new Response($return,200);
+
+    }    
+    
     public function getProvinciasByIdPaisAction(){
-        
-            //CONSULTA MEDIANTE DQL Y REPOSITORIO (metodo aconsejado)
-            //$em = $this->getDoctrine()->getEntityManager();
-            //$paises = $em->getRepository('NVParejasBundle:Paises')
-            //    ->findAllOrderedById(); 
-            
-            //return new Response($paises -> getPais());
         
         $peticion = $this->getRequest();
         if($peticion->isXmlHttpRequest()){
             $id_pais = $peticion->request->get('id');
             
             $em = $this->getDoctrine()->getEntityManager();
-            $paises = $em->getRepository('NVParejasBundle:Paises')
-                ->findAllOrderedById(); 
-           
+            $provincias = $em->getRepository('NVParejasBundle:Provincias')
+                ->findAllByIdPais($id_pais);            
             
-            $return = json_encode($paises);
+            $return = json_encode($provincias);
             return new Response($return,200);
         }else{
             return new Response("Error",400);

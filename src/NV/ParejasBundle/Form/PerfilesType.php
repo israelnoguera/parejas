@@ -14,6 +14,11 @@ class PerfilesType extends AbstractType{
         $builder
             ->add('pais', 'entity', array(
             'class' => 'NVParejasBundle:Paises',
+            'query_builder' => function (\NV\ParejasBundle\Repository\PaisesRepository $repository){
+                return $repository->createQueryBuilder('p')
+                    ->where('p.estado = 1')
+                    ->add('orderBy', 'p.pais ASC');
+             },                
             'property' => 'pais', 
             'label'=>'Pais:'))
             ->add('provincia', 'choice', array(
