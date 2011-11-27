@@ -25,6 +25,30 @@ $('document').ready(function(){
             });            
 
         });
+        
+        $('#usuario_perfiles_provincia').change(function(){
+            
+            $('#usuario_perfiles_provincia option:selected').each(function () {
+                id_provincia = $(this).val();
+            }); 
+            
+            $.ajax({
+                type: "POST",
+                url: "/webservices/getLocalidadesByIdProvincia",
+                async:false,
+                dataType: 'json',
+                data: "id="+id_provincia,
+                success: function(data){
+                    var prov = form.find('#usuario_perfiles_localidad');
+                    prov.html('');
+
+                    $.each( data, function(k, v){
+                       prov.append('<option value="'+v.id+'">'+v.localidad+'</option>');
+                    });
+                }
+            });            
+
+        });        
 
   
     }    

@@ -9,7 +9,7 @@
     <div class="error">{{ error.message }}</div>
 {% endif %}
 
-<form action="{{ path("acceso_check") }}" method="post" id="login">
+<form action="{{ path("login_check") }}" method="post" id="login">
     <div>
         <label for="username">Nombre de usuario</label>
         <input type="text" id="username" name="_username" value="{{ last_username }}" />

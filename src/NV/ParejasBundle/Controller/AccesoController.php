@@ -10,17 +10,17 @@ use NV\ParejasBundle\Form\UsuarioType;
 use NV\ParejasBundle\Entity\Usuarios;
 use NV\ParejasBundle\Entity\Perfiles;
 
-class SeguridadController extends Controller{
+class AccesoController extends Controller{
     
-    public function accesoAction(){
+    public function loginAction(){
         if ($this->get('request')->attributes->has(SecurityContext::AUTHENTICATION_ERROR)) {
             $error = $this->get('request')->attributes->get(SecurityContext::AUTHENTICATION_ERROR);
         } else {
             $error = $this->get('request')->getSession()->get(SecurityContext::AUTHENTICATION_ERROR);
         }
 
-        return $this->render('NVParejasBundle:Public:acceso.html.twig', array(
-            'mainmenu'      => 'acceso',
+        return $this->render('NVParejasBundle:Public:login.html.twig', array(
+            'mainmenu'      => 'login',
             'last_username' => $this->get('request')->getSession()->get(SecurityContext::LAST_USERNAME),
             'error'         => $error,
         ));        

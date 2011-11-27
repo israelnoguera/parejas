@@ -1,3 +1,7 @@
 webservices_getProvinciasByIdPais:
     pattern:  /getProvinciasByIdPais
-    defaults: { _controller: NVParejasBundle:Webservices:getProvinciasByIdPais }
+    defaults: { _controller: NVParejasBundle:Geo:getProvinciasByIdPais }
+    
+webservices_getLocalidadesByIdProvincia:
+    pattern:  /getLocalidadesByIdProvincia
+    defaults: { _controller: NVParejasBundle:Geo:getLocalidadesByIdProvincia }    

@@ -1,24 +1,24 @@
-portada:
-    pattern:  /
-    defaults: { _controller: NVParejasBundle:Portada:index }         
-    
-acceso:
-    pattern:  /acceso
-    defaults: { _controller: NVParejasBundle:Seguridad:acceso }
+login:
+    pattern:  /login
+    defaults: { _controller: NVParejasBundle:Acceso:login }
 
-bienvenido:
-    pattern:  /bienvenido
-    defaults: { _controller: NVParejasBundle:Seguridad:bienvenido }
-
-acceso_check:
-    pattern:  /acceso_check
+login_check:
+    pattern:  /login_check
 
 logout:
     pattern:  /logout
+
+home:
+    pattern:  /
+    defaults: { _controller: NVParejasBundle:Home:index } 
+
+bienvenido:
+    pattern:  /bienvenido
+    defaults: { _controller: NVParejasBundle:Acceso:bienvenido }
     
 registro:
     pattern:  /registro
-    defaults: { _controller: NVParejasBundle:Seguridad:registro }        
+    defaults: { _controller: NVParejasBundle:Acceso:registro }        
     
 usuarios:
     pattern:  /usuarios/{pag}

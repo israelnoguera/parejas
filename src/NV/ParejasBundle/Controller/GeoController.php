@@ -5,7 +5,7 @@ namespace NV\ParejasBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 
-class WebservicesController extends Controller{
+class GeoController extends Controller{
     
     public function getPaisesAction(){       
 
@@ -34,5 +34,22 @@ class WebservicesController extends Controller{
             return new Response("Error",400);
         }
     }
+    
+    public function getLocalidadesByIdProvinciaAction(){
+        
+        $peticion = $this->getRequest();
+        if($peticion->isXmlHttpRequest()){
+            $id_provincia = $peticion->request->get('id');
+            
+            $em = $this->getDoctrine()->getEntityManager();
+            $localidades = $em->getRepository('NVParejasBundle:Localidades')
+                ->findAllByIdProvincia($id_provincia);            
+            
+            $return = json_encode($localidades);
+            return new Response($return,200);
+        }else{
+            return new Response("Error",400);
+        }
+    }    
     
 }
