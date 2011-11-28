@@ -100,6 +100,14 @@ class Usuarios implements UserInterface, \Serializable{
         return $user->getUsername() == $this->getUsername();
     }    
     
+    public function getCondiciones(){
+        
+    } 
+    
+    public function setCondiciones(){
+        
+    }    
+    
     public function serialize(){
         return serialize(array(
             $this->getUsername()
@@ -136,7 +144,11 @@ class Usuarios implements UserInterface, \Serializable{
     }
 
     public function setRoles($roles){
-        $this->roles = $roles;
+        if(empty($roles)){
+            $this->roles = 'ROLE_USER';
+        }else{
+            $this->roles = $roles;
+        }
     }
 
 

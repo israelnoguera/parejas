@@ -9,73 +9,76 @@
     </div>
     {% endif %}
 
-    {{ form_errors(form) }}
-
     <form id="registroForm" action="{{ path('registro') }}" method="post" {{ form_enctype(form) }}>
+        
+        <table>
+        
+            <tr>
+                <td>{{ form_label(form.username) }}</td>
+                <td>{{ form_widget(form.username) }}</td>
+                <td>{{ form_errors(form.username) }}</td>
+            </tr>
 
-        {{ form_errors(form.username) }}
-        <p>
-            {{ form_label(form.username) }}
-            {{ form_widget(form.username) }}
-        </p>
+            <tr>
+                <td>{{ form_label(form.email) }}</td>
+                <td>{{ form_widget(form.email) }}</td>
+                <td>{{ form_errors(form.email) }}</td>
+            </tr>            
+            
+            <tr>
+                <td>{{ form_label(form.perfiles.pais) }}</td>
+                <td>{{ form_widget(form.perfiles.pais) }}</td>
+                <td>{{ form_errors(form.perfiles.pais) }}</td>
+            </tr>
+            
+            <tr>
+                <td>{{ form_label(form.perfiles.provincia) }}</td>
+                <td>{{ form_widget(form.perfiles.provincia) }}</td>
+                <td>{{ form_errors(form.perfiles.provincia) }}</td>
+            </tr>   
+            
+            <tr>
+                <td>{{ form_label(form.perfiles.localidad) }}</td>
+                <td>{{ form_widget(form.perfiles.localidad) }}</td>
+                <td>{{ form_errors(form.perfiles.localidad) }}</td>
+            </tr>             
+              
+            <tr>
+                <td>{{ form_label(form.perfiles.tipo_perfil) }}</td>
+                <td>{{ form_widget(form.perfiles.tipo_perfil) }}</td>
+                <td>{{ form_errors(form.perfiles.tipo_perfil) }}</td>
+            </tr>            
+        
+            <tr>
+                <td>{{ form_label(form.password.first, 'Contraseña') }}</td>
+                <td>{{ form_widget(form.password.first) }}</td>
+                <td>{{ form_errors(form.password.first) }}</td>
+            </tr>
+            
+            <tr>
+                <td>{{ form_label(form.password.second, 'Repetir contraseña') }}</td>
+                <td>{{ form_widget(form.password.second) }}</td>
+                <td>{{ form_errors(form.password.second) }}</td>
+            </tr>
+            
+            <tr>
+                <td>{{ form_label(form.condiciones) }}</td>
+                <td>{{ form_widget(form.condiciones) }}</td>
+                <td>{{ form_errors(form.condiciones) }}</td>
+            </tr> 
+            
+            <tr>
+                <td></td>
+                <td><input type="submit" value="Regístrate" /></td>
+                <td></td>
+            </tr>                 
+        
+            <tr>
+                <td colspan="3">{{ form_errors(form) }}</td>
+            </tr>
 
-        {{ form_errors(form.email) }}
-        <p>
-            {{ form_label(form.email) }}
-            {{ form_widget(form.email) }}
-        </p>
-
-        {{ form_errors(form.roles) }}
-        <p>
-            {{ form_label(form.roles) }}
-            {{ form_widget(form.roles) }}
-        </p>   
+        </table>
         
-        
-        {{ form_errors(form.perfiles.pais) }}
-        <p>
-            {{ form_label(form.perfiles.pais) }}
-            {{ form_widget(form.perfiles.pais) }}
-        </p> 
-        
-        {{ form_errors(form.perfiles.provincia) }}
-        <p>
-            {{ form_label(form.perfiles.provincia) }}
-            {{ form_widget(form.perfiles.provincia) }}
-        </p>
-        
-        {{ form_errors(form.perfiles.localidad) }}
-        <p>
-            {{ form_label(form.perfiles.localidad) }}
-            {{ form_widget(form.perfiles.localidad) }}
-        </p>
-        
-        {{ form_errors(form.perfiles.tipo_perfil) }}
-        <p>
-            {{ form_label(form.perfiles.tipo_perfil) }}
-            {{ form_widget(form.perfiles.tipo_perfil) }}
-        </p>        
-        
-        
-        <div class="grid_6 alpha">
-            {{ form_errors(form.password.first) }}
-            <p>
-                {{ form_label(form.password.first, 'Contraseña') }}
-                {{ form_widget(form.password.first) }}
-            </p>
-        </div>
-
-        <div class="grid_6 omega">
-            {{ form_errors(form.password.second) }}
-            <p>
-                {{ form_label(form.password.second, 'Repetir contraseña') }}
-                {{ form_widget(form.password.second) }}
-            </p>
-        </div>
-        {{ form_errors(form._token) }}
-        {{ form_widget(form._token) }}
-
-        <input type="submit" value="Regístrate" />
     </form>
     
 {% endblock body %}

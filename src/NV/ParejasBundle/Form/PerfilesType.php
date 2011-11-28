@@ -23,13 +23,16 @@ class PerfilesType extends AbstractType{
             'label'=>'Pais:'))
             ->add('provincia', 'choice', array(
                     'choices'   => array('' => 'Selecciona un pais'),
-                    'required'  => true,            
+                    'required'  => false,            
                 ))
             ->add('localidad', 'choice', array(
                     'choices'   => array('' => 'Selecciona una provincia'),
-                    'required'  => true,            
+                    'required'  => false,            
                 ))
-            ->add('tipo_perfil', 'text', array('label' => 'Tipo de perfil'));
+            ->add('tipo_perfil', 'choice', array(
+                'choices'   => array('1' => 'Somos pareja', '2' => 'Soy un chico solo', '3' => 'Soy una chica sola'),
+                'required'  => true,
+                ));
         
     }
 
