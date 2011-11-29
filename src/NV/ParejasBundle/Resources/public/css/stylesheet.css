@@ -22,6 +22,14 @@ a:link, a:visited, a:hover{
 .left{float:left;}
 .right{float:right;}
 
+.w220{
+    width:220px;
+}
+
+.w488{
+    width:488px;
+}
+
 .logo{
     padding:12px 0 0 12px;
 }
@@ -143,7 +151,6 @@ nav#mainMenu li p{
     min-height: 400px;
     background:#FFF;
     margin:0 12px;
-    padding: 12px;
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
     border-radius: 3px;    
@@ -157,31 +164,37 @@ nav#mainMenu li p{
     padding:4px;    
 }
 
-.blueWindow{
+.blackWindow, .redWindow{
     overflow: hidden;
+    margin:12px 0 0 10px;
     background: #f4f4f4 url(/images/back-window-black.jpg) repeat-x;
     -webkit-border-radius: 6px;
     -moz-border-radius: 6px;
     border-radius: 6px; 
 }
+.redWindow{
+    background: #f4f4f4 url(/images/back-window-red.jpg) repeat-x;    
+}
 
-div[class$='Window'] > h1{
+.redWindow > h1,
+.blackWindow > h1{
     float:left;
     padding-left: 10px;
     height: 36px;
     line-height: 36px;
-    font-size: 20px;
+    font-size: 16px;
     color:#fff;
     text-shadow: 0px 1px 2px #000000;
     filter: dropshadow(color=#000000, offx=0, offy=1);    
 }
-div[class$='Window'] > h2{
+.redWindow > h2,
+.blackWindow > h2{
     font-weight: normal;
     float:right;
     padding-right: 10px;
     height: 36px;
     line-height: 36px;
-    font-size: 14px;
+    font-size: 12px;
     color:#fff;
     text-shadow: 0px 1px 2px #000000;
     filter: dropshadow(color=#000000, offx=0, offy=1);    

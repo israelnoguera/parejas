@@ -2,9 +2,41 @@
 
 {% block titulo %}Portada{% endblock %}
 
-{% block cuerpo %}
-<h1>Página inicial</h1>
+{% block body %}
     
+    <div class="blackWindow left w220">
+
+        <h1>Accede a tu cuenta</h1>
+        <h2>Introduce tus credenciales</h2>
+        <br clear="all" />
+        
+        <p>xsdsd</p>
+        <p>xsdsd</p>
+        
+    </div>
+
+    <div class="redWindow left w488">
+
+        <h1>Accede a tu cuenta</h1>
+        <h2>Introduce tus credenciales</h2>
+        <br clear="all" />
+        
+        <p>xsdsd</p>
+        <p>xsdsd</p>
+
+    </div>
+
+    <div class="blackWindow left w220">
+
+        <h1>Accede a tu cuenta</h1>
+        <h2>Introduce tus credenciales</h2>
+        <br clear="all" />
+        
+        <p>xsdsd</p>
+        <p>xsdsd</p>
+        
+    </div>
+
     {% if app.user %}
         <p>Estás logueado como <strong>{{ app.user.username }}</strong></p>
         <p><a href="{{ path('logout') }}">Salir</a></p>
@@ -14,8 +46,4 @@
         <li>Tienes Rol de Admin</li>
     {% endif %}    
 
-<ul>
-    <li><a href="{{ path('acceso') }}">Iniciar Sesión</a></li>
-    <li><a href="{{ path('registro') }}">Registro</a></li>
-</ul>
-{% endblock cuerpo %}
+{% endblock body %}
