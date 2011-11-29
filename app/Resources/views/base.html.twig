@@ -19,14 +19,31 @@
             
         <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
     </head>
-    <body>
-        <div id="mainWrapper">
+    <body> 
+
+        {% block bannerback %}
+        <div id="banner-back">
+            <div class="banner-crop">
+                <div class="banner-center">
+                    <div class="banner-offset">
+                        <div class="banner-img">
+                            {% block bannerbackimg %}                            
+                            <img src="{{ asset('images/back-style.png') }}" border="0">
+                            {% endblock bannerbackimg %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endblock bannerback %}
+        
+        <div id="mainWrapper">            
             <header>
             {% block header %}
-                    <a href="{{ path('home') }}"><img src="/images/logo.gif" width="304" height="48" alt="" /></a>
-                {% include ':templates:mainMenu.html.twig' %}
-                {% include ':templates:authMenu.html.twig' %}
-                {% include ':templates:search.html.twig' %}                                
+                {% block logo %}<a href="{{ path('home') }}"><img src="/images/logo.gif" class="logo" width="304" height="48" alt="" /></a>{% endblock %}
+                {% block mainmenu %}{% include ':templates:mainMenu.html.twig' %}{% endblock %}
+                {% block authmenu %}{% include ':templates:authMenu.html.twig' %}{% endblock %}
+                {% block search %}{% include ':templates:search.html.twig' %}{% endblock %}
             {% endblock header %}
             </header>
                 
@@ -42,5 +59,6 @@
             {% endblock footer %}          
             </footer>                    
         </div>
+
     </body>
 </html>

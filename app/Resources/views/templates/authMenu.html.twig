@@ -12,8 +12,18 @@
          
         <p><a href="{{ path('logout') }}">Salir</a></p>
     {% else %}
-        <a href="{{ path('login') }}">Iniciar sesión</a>
-        <a href="{{ path('registro') }}">Registro</a>
+                                
+        <form action="{{ path("login_check") }}" method="post" id="login">
+            <input type="text" id="username" name="_username" value="identificador" />
+            <input type="password" id="password" name="_password" value="contraseña" />
+            <input type="submit" value="Acceder" />
+        </form>        
+        
+        <br clear="all" />
+        
+        <a href="{{ path('registro') }}">Crear nueva cuenta</a><br />
+        <a href="{{ path('login') }}">Iniciar sesión con el email</a>
+        
     {% endif %}    
 
 </div>

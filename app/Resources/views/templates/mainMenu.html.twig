@@ -4,7 +4,17 @@
 
 <nav id="mainMenu">
     <ul>
-        <li><a {{ mainmenu == 'inicio' ? "class='select'" : "" }} href="{{ path('home') }}">Home</a></li>
-        <li><a {{ mainmenu == 'usuarios' ? "class='select'" : "" }} href="{{ path('usuarios') }}">Usuarios</a></li>
+        <li>
+            {{ mainmenu == 'inicio' ? "<p>inicio</p>" : "" }}
+            <a {{ mainmenu == 'inicio' ? "class='select'" : "" }} href="{{ path('home') }}">Home</a>
+        </li>
+        <li>
+            {{ mainmenu == 'usuarios' ? "<p>usuarios</p>" : "" }}
+            <a {{ mainmenu == 'usuarios' ? "class='select'" : "" }} href="{{ path('usuarios') }}">Buscador de usuarios</a>
+        </li>
+        <li><a {{ mainmenu == 'anuncios' ? "class='select'" : "" }} href="#">Tablón de anuncios</a></li>
+        <li><a {{ mainmenu == 'locales' ? "class='select'" : "" }} href="#">Locales liberales</a></li>
+        <li><a {{ mainmenu == 'grupos' ? "class='select'" : "" }} href="#">Grupos</a></li>
+        <li><a {{ mainmenu == 'eventos' ? "class='select'" : "" }} href="#">Fiestas y eventos</a></li>
     </ul>
 </nav>
