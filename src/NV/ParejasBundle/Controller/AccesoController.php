@@ -53,9 +53,11 @@ class AccesoController extends Controller{
                 $password = $codificador->encodePassword($usuario->getPassword(), $usuario->getSalt());
                 $usuario->setPassword($password);
                  */
-
+                
+                
                 //relacionamos los dos objetos
                 $usuario->getPerfiles()->setUsuario($usuario);
+                
                 // Guardamos el objeto en base de datos
                 $em = $this->get('doctrine')->getEntityManager();
                 $em->persist($usuario); //persistiendo el objeto usuario

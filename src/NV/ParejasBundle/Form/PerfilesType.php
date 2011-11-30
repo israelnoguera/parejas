@@ -12,20 +12,20 @@ class PerfilesType extends AbstractType{
     public function buildForm(FormBuilder $builder, array $options){
         
         $builder
-            ->add('pais', 'entity', array(
+            ->add('pais_id', 'entity', array(
             'class' => 'NVParejasBundle:Paises',
             'query_builder' => function (EntityRepository $er){
                 return $er->createQueryBuilder('p')
                     ->where('p.estado = 1')
-                    ->add('orderBy', 'p.pais ASC');
+                    ->add('orderBy', 'p.pais ASC');                
              },                
             'property' => 'pais', 
             'label'=>'Pais:'))                     
-            ->add('provincia', 'choice', array(
+            ->add('provincia_id', 'choice', array(
                     'choices'   => array('1' => 'Selecciona un pais'),
                     'required'  => false,            
                 ))
-            ->add('localidad', 'choice', array(
+            ->add('localidad_id', 'choice', array(
                     'choices'   => array('1' => 'Selecciona una provincia'),
                     'required'  => false,            
                 ))                                          

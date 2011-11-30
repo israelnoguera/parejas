@@ -50,7 +50,31 @@ class Perfiles{
     
     public function getId(){
         return $this->id;
-    }  
+    }
+
+    public function setPais($pais){
+        $this->pais = $pais;
+    }
+
+    public function getPais(){
+        return $this->pais;
+    }
+
+    public function setProvincia($provincia){
+        $this->provincia = $provincia;
+    }
+
+    public function getProvincia(){
+        return $this->provincia;
+    }    
+    
+    public function setLocalidad($localidad){
+        $this->localidad = $localidad;
+    }
+
+    public function getLocalidad(){
+        return $this->localidad;
+    }    
     
     public function setTipoPerfil($tipoPerfil){
         $this->tipo_perfil = $tipoPerfil;
@@ -68,65 +92,4 @@ class Perfiles{
         return $this->usuario;
     }     
 
-
-    /**
-     * Set pais_id
-     *
-     * @param integer $paisId
-     */
-    public function setPaisId($paisId)
-    {
-        $this->pais_id = $paisId;
-    } 
-    
-
-    /**
-     * Get pais_id
-     *
-     * @return integer 
-     */
-    public function getPaisId()
-    {
-        return $this->pais_id;
-    }
-
-    /**
-     * Set provincia_id
-     *
-     * @param integer $provinciaId
-     */
-    public function setProvinciaId($provinciaId)
-    {
-        $this->provincia_id = $provinciaId;
-    }
-
-    /**
-     * Get provincia_id
-     *
-     * @return integer 
-     */
-    public function getProvinciaId()
-    {
-        return $this->provincia_id;
-    }
-
-    /**
-     * Set localidad_id
-     *
-     * @param integer $localidadId
-     */
-    public function setLocalidadId($localidadId)
-    {
-        $this->localidad_id = $localidadId;
-    }
-
-    /**
-     * Get localidad_id
-     *
-     * @return integer 
-     */
-    public function getLocalidadId()
-    {
-        return $this->localidad_id;
-    }
 }

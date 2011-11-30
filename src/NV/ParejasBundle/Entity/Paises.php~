@@ -62,59 +62,133 @@ class Paises
     private $estado;
 
 
-    public function getId(){
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
         return $this->id;
     }
 
-    public function __toString(){
-       return strval($this->id);
-    } 
- 
-    public function setIso1($iso1){
+    /**
+     * Set iso1
+     *
+     * @param integer $iso1
+     */
+    public function setIso1($iso1)
+    {
         $this->iso1 = $iso1;
     }
 
-    public function getIso1(){
+    /**
+     * Get iso1
+     *
+     * @return integer 
+     */
+    public function getIso1()
+    {
         return $this->iso1;
     }
 
-    public function setIso2($iso2){
+    /**
+     * Set iso2
+     *
+     * @param integer $iso2
+     */
+    public function setIso2($iso2)
+    {
         $this->iso2 = $iso2;
     }
 
-    public function getIso2(){
+    /**
+     * Get iso2
+     *
+     * @return integer 
+     */
+    public function getIso2()
+    {
         return $this->iso2;
     }
 
-    public function setIso3($iso3){
+    /**
+     * Set iso3
+     *
+     * @param integer $iso3
+     */
+    public function setIso3($iso3)
+    {
         $this->iso3 = $iso3;
     }
 
-    public function getIso3(){
+    /**
+     * Get iso3
+     *
+     * @return integer 
+     */
+    public function getIso3()
+    {
         return $this->iso3;
     }
 
-    public function setPais($pais){
+    /**
+     * Set pais
+     *
+     * @param string $pais
+     */
+    public function setPais($pais)
+    {
         $this->pais = $pais;
     }
 
-    public function getPais(){
+    /**
+     * Get pais
+     *
+     * @return string 
+     */
+    public function getPais()
+    {
         return $this->pais;
     }
 
-    public function setSlug($slug){
+    /**
+     * Set slug
+     *
+     * @param string $slug
+     */
+    public function setSlug($slug)
+    {
         $this->slug = $slug;
     }
 
-    public function getSlug(){
+    /**
+     * Get slug
+     *
+     * @return string 
+     */
+    public function getSlug()
+    {
         return $this->slug;
     }
 
-    public function setEstado($estado){
+    /**
+     * Set estado
+     *
+     * @param integer $estado
+     */
+    public function setEstado($estado)
+    {
         $this->estado = $estado;
     }
 
-    public function getEstado(){
+    /**
+     * Get estado
+     *
+     * @return integer 
+     */
+    public function getEstado()
+    {
         return $this->estado;
     }
 }
