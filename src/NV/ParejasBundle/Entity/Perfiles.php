@@ -15,15 +15,7 @@ class Perfiles{
     /**
      * @ORM\OneToOne(targetEntity="Usuarios", inversedBy="perfiles")
      */
-    protected $usuario;    
-    
-    public function setUsuario(\NV\ParejasBundle\Entity\Usuarios $usuario){
-        $this->usuario = $usuario;
-    }
-
-    public function getUsuario(){
-        return $this->usuario;
-    }    
+    protected $usuario;          
     
     /**
      * @ORM\Column(name="id", type="integer")
@@ -33,24 +25,24 @@ class Perfiles{
     protected $id;
 
     /**
+     * @ORM\Column(name="pais", type="integer")
+     */
+    protected $pais;    
+    
+    /**
      * @ORM\Column(name="provincia", type="integer")
      */
     protected $provincia;
 
     /**
-     * @ORM\Column(name="pais", type="integer")
-     */
-    protected $pais;
-
-    /**
-     * @ORM\Column(name="tipo_perfil", type="smallint")
-     */
-    protected $tipo_perfil;
-
-    /**
      * @ORM\Column(name="localidad", type="integer")
      */
     protected $localidad;   
+    
+    /**
+     * @ORM\Column(name="tipo_perfil", type="smallint")
+     */
+    protected $tipo_perfil;    
     
     /*
      * SETTERS Y GETTERS
@@ -58,14 +50,6 @@ class Perfiles{
     
     public function getId(){
         return $this->id;
-    }
-
-    public function setProvincia($provincia){
-        $this->provincia = $provincia;
-    }
-
-    public function getProvincia(){
-        return $this->provincia;
     }
 
     public function setPais($pais){
@@ -76,6 +60,22 @@ class Perfiles{
         return $this->pais;
     }
 
+    public function setProvincia($provincia){
+        $this->provincia = $provincia;
+    }
+
+    public function getProvincia(){
+        return $this->provincia;
+    }    
+    
+    public function setLocalidad($localidad){
+        $this->localidad = $localidad;
+    }
+
+    public function getLocalidad(){
+        return $this->localidad;
+    }    
+    
     public function setTipoPerfil($tipoPerfil){
         $this->tipo_perfil = $tipoPerfil;
     }
@@ -83,13 +83,13 @@ class Perfiles{
     public function getTipoPerfil(){
         return $this->tipo_perfil;
     }
-
-    public function setLocalidad($localidad){
-        $this->localidad = $localidad;
+    
+    public function setUsuario(\NV\ParejasBundle\Entity\Usuarios $usuario){
+        $this->usuario = $usuario;
     }
 
-    public function getLocalidad(){
-        return $this->localidad;
-    }
+    public function getUsuario(){
+        return $this->usuario;
+    }     
 
 }

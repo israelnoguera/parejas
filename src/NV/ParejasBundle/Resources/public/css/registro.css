@@ -1,0 +1,31 @@
+table#registro{
+    margin:12px;
+    width:800px;
+    margin:auto;
+}
+
+table#registro tr td:first-child{
+    width:200px;
+    text-align: right;
+    font-weight: bold;
+    padding-right:8px;
+}
+
+table#registro tr td:last-child{
+    width:360px;    
+}
+
+table#registro ul{
+    list-style: none;
+    color:red;
+}
+
+table#registro input[type='text'],
+table#registro input[type='password'],
+table#registro input[type='email']{
+    width: 210px;    
+}
+
+table#registro select{
+    width: 210px;    
+}

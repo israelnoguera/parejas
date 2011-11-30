@@ -47,7 +47,7 @@ class Usuarios implements UserInterface, \Serializable{
 
     /**
     * @ORM\Column(type="string", length=100)
-    * @Assert\NotBlank()
+    * @Assert\NotBlank(message="Entre 5 y 10 caracteres")
     * @Assert\MinLength(5)
     * @Assert\MaxLength(10)
     */
@@ -55,7 +55,6 @@ class Usuarios implements UserInterface, \Serializable{
     
     /**
     * @ORM\Column(type="string", length=40)
-    * @Assert\NotBlank()
     */
     protected $roles;    
 
@@ -78,19 +77,12 @@ class Usuarios implements UserInterface, \Serializable{
     public function __construct(){
         $this->fh_alta = new \DateTime("now");
         $this->state = 1;
-    }
-    
-    public function getRoles(){
-        return array('ROLE_'.$this->roles);
-    }
+        $this->roles = 'USER';
+    }    
 
     public function getSalt(){
         return false;
-    }
-    
-    public function getUsername(){
-        return $this->username;
-    }
+    }   
 
     public function eraseCredentials(){
         return false;
@@ -143,92 +135,48 @@ class Usuarios implements UserInterface, \Serializable{
         $this->username = $username;
     }
 
+    public function getUsername(){
+        return $this->username;
+    }    
+    
     public function setRoles($roles){
-        if(empty($roles)){
-            $this->roles = 'ROLE_USER';
-        }else{
-            $this->roles = $roles;
-        }
+        $this->roles = $roles;
     }
 
-
-    /**
-     * Set state
-     *
-     * @param integer $state
-     */
-    public function setState($state)
-    {
+    public function getRoles(){
+        return array('ROLE_'.$this->roles);
+    }    
+    
+    public function setState($state){
         $this->state = $state;
     }
 
-    /**
-     * Get state
-     *
-     * @return integer 
-     */
-    public function getState()
-    {
+    public function getState(){
         return $this->state;
     }
 
-    /**
-     * Set fh_alta
-     *
-     * @param datetime $fhAlta
-     */
-    public function setFhAlta($fhAlta)
-    {
+    public function setFhAlta($fhAlta){
         $this->fh_alta = $fhAlta;
     }
 
-    /**
-     * Get fh_alta
-     *
-     * @return datetime 
-     */
-    public function getFhAlta()
-    {
+    public function getFhAlta(){
         return $this->fh_alta;
     }
 
-    /**
-     * Set fh_ult_acceso
-     *
-     * @param datetime $fhUltAcceso
-     */
-    public function setFhUltAcceso($fhUltAcceso)
-    {
+    public function setFhUltAcceso($fhUltAcceso){
         $this->fh_ult_acceso = $fhUltAcceso;
     }
 
-    /**
-     * Get fh_ult_acceso
-     *
-     * @return datetime 
-     */
-    public function getFhUltAcceso()
-    {
+    public function getFhUltAcceso(){
         return $this->fh_ult_acceso;
     }      
 
-    /**
-     * Set perfiles
-     *
-     * @param NV\ParejasBundle\Entity\Perfiles $perfiles
-     */
-    public function setPerfiles(\NV\ParejasBundle\Entity\Perfiles $perfiles)
-    {
+    public function setPerfiles(\NV\ParejasBundle\Entity\Perfiles $perfiles){
         $this->perfiles = $perfiles;
     }
 
-    /**
-     * Get perfiles
-     *
-     * @return NV\ParejasBundle\Entity\Perfiles 
-     */
-    public function getPerfiles()
-    {
+    public function getPerfiles(){
         return $this->perfiles;
     }
+    
 }

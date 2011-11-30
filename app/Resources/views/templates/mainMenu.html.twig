@@ -4,17 +4,29 @@
 
 <nav id="mainMenu">
     <ul>
-        <li>
+        <li {{ mainmenu == 'inicio' ? "class='select'" : "" }}>
             {{ mainmenu == 'inicio' ? "<p>inicio</p>" : "" }}
-            <a {{ mainmenu == 'inicio' ? "class='select'" : "" }} href="{{ path('home') }}">Home</a>
+            <a href="{{ path('home') }}">Home</a>
         </li>
-        <li>
+        <li {{ mainmenu == 'usuarios' ? "class='select'" : "" }}>
             {{ mainmenu == 'usuarios' ? "<p>usuarios</p>" : "" }}
-            <a {{ mainmenu == 'usuarios' ? "class='select'" : "" }} href="{{ path('usuarios') }}">Buscador de usuarios</a>
+            <a href="{{ path('usuarios') }}">Buscador de usuarios</a>
         </li>
-        <li><a {{ mainmenu == 'anuncios' ? "class='select'" : "" }} href="#">Tablón de anuncios</a></li>
-        <li><a {{ mainmenu == 'locales' ? "class='select'" : "" }} href="#">Locales liberales</a></li>
-        <li><a {{ mainmenu == 'grupos' ? "class='select'" : "" }} href="#">Grupos</a></li>
-        <li><a {{ mainmenu == 'eventos' ? "class='select'" : "" }} href="#">Fiestas y eventos</a></li>
+        <li {{ mainmenu == 'anuncios' ? "class='select'" : "" }}>
+            {{ mainmenu == 'anuncios' ? "<p>anuncios</p>" : "" }}
+            <a {{ mainmenu == 'anuncios' ? "class='select'" : "" }} href="#">Tablón de anuncios</a>
+        </li>
+        <li {{ mainmenu == 'locales' ? "class='select'" : "" }}>
+            {{ mainmenu == 'locales' ? "<p>locales</p>" : "" }}
+            <a {{ mainmenu == 'locales' ? "class='select'" : "" }} href="#">Locales liberales</a>
+        </li>
+        <li {{ mainmenu == 'grupos' ? "class='select'" : "" }}>
+            {{ mainmenu == 'grupos' ? "<p>grupos</p>" : "" }}
+            <a {{ mainmenu == 'grupos' ? "class='select'" : "" }} href="#">Grupos</a>
+        </li>
+        <li {{ mainmenu == 'eventos' ? "class='select'" : "" }}>
+            {{ mainmenu == 'eventos' ? "<p>eventos</p>" : "" }}
+            <a {{ mainmenu == 'eventos' ? "class='select'" : "" }} href="#">Fiestas y eventos</a>
+        </li>
     </ul>
 </nav>
