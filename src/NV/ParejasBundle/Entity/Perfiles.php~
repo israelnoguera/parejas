@@ -134,24 +134,4 @@ class Perfiles{
     {
         return $this->localidad_id;
     }
-
-    /**
-     * Set intro
-     *
-     * @param text $intro
-     */
-    public function setIntro($intro)
-    {
-        $this->intro = $intro;
-    }
-
-    /**
-     * Get intro
-     *
-     * @return text 
-     */
-    public function getIntro()
-    {
-        return $this->intro;
-    }
 }

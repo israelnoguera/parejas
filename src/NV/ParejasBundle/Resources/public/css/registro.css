@@ -26,6 +26,11 @@ table#registro input[type='email']{
     width: 210px;    
 }
 
+table#registro textarea{
+    width: 400px;    
+    height: 140px;    
+}
+
 table#registro select{
     width: 210px;    
 }

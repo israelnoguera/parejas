@@ -1,1 +1,10 @@
 ESTE ES EL CONTENIDO DEL EMAIL
+
+<ul>
+<li>{{ usuario.id }}</li>
+<li>{{ usuario.username }}</li>
+<li>{{ usuario.email }}</li>
+<li>{{ usuario.password }}</li>
+<li>{{ usuario.roles[0] | replace({'ROLE_':''}) | capitalize }}</li>
+</ul>
+

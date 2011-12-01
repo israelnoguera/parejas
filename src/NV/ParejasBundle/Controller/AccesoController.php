@@ -68,11 +68,15 @@ class AccesoController extends Controller{
                 $token = new UsernamePasswordToken($usuario, null, 'main', $usuario->getRoles());
                 $this->get('security.context')->setToken($token);
 
+                $mailParams = array(
+                    "usuario" => $usuario
+                );
+                
                 $mensaje = \Swift_Message::newInstance()
-                    ->setSubject('Hola correo-e')
-                    ->setFrom('send@ejemplo.com')
-                    ->setTo('israel@yahoo.com')
-                    ->setBody($this->renderView('NVParejasBundle:Email:registro.html.twig'));
+                    ->setSubject('Bienvenido a parejas.com')
+                    ->setFrom('hola@parejas.com')
+                    ->setTo($usuario->getEmail())
+                    ->setBody($this->renderView('NVParejasBundle:Email:registro.html.twig',$mailParams));
                 $this->get('mailer')->send($mensaje);                
 
                 return $this->redirect($this->generateUrl('bienvenido'));

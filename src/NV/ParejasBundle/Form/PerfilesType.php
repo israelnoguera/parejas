@@ -18,17 +18,19 @@ class PerfilesType extends AbstractType{
                 return $er->createQueryBuilder('p')
                     ->where('p.estado = 1')
                     ->add('orderBy', 'p.pais ASC');                
-             },                
-            'property' => 'pais', 
+             }, 
+            'property' => 'pais',
+            'empty_value' => 'Selecciona un pais',
+            'preferred_choices' => array(73),                     
             'label'=>'Selecciona un pais:'))                     
             ->add('provincia_id', 'choice', array(
-                    'choices'   => array('0' => 'Selecciona un pais'),
+                    'choices'   => array('' => 'Selecciona una provincia'),
                     'required'  => false,
                     'empty_value' => false,
                     'label' => 'Selecciona una provincia:'
                 ))
             ->add('localidad_id', 'choice', array(
-                    'choices'   => array('0' => 'Selecciona una provincia'),
+                    'choices'   => array('' => 'Selecciona una localidad'),
                     'required'  => false,
                     'empty_value' => false,
                     'label' => 'Selecciona una localidad:'
@@ -38,7 +40,12 @@ class PerfilesType extends AbstractType{
                 'required'  => true,
                 'empty_value' => false,
                 'label' => 'Selecciona el tipo de perfil:'
-                ));
+                ))
+            ->add('intro','textarea',array(
+                'label' => 'Introducción:',
+                'trim' => true,
+                'required'  => false
+            ));
         
     }
 

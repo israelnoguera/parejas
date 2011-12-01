@@ -28,7 +28,7 @@
                 
                 <tr>
                     <td></td>
-                    <td colspan="2" class="pb8 fs10">Este será el identificador/alias de tu cuenta y servirá para que el resto de usuarios te localice. No utilices caracteres extraños ni espacios.</td>
+                    <td colspan="2" class="pb8 fs10">Este será el identificador/alias de tu cuenta y servirá para que el resto de usuarios te localice. No utilices caracteres extraños ni espacios. Por ejemplo: pareja.xtrema, morboparvalencia, romeo_swing, jon-bea-liberales.</td>
                 </tr>
 
                 <tr>
@@ -56,7 +56,7 @@
                 
                 <tr>
                     <td></td>
-                    <td colspan="2" class="pb32 fs10">Introduce tu contraseña.</td>
+                    <td colspan="2" class="pb16 fs10">Introduce tu contraseña.</td>
                 </tr>                 
                 
                 <tr>
@@ -79,17 +79,29 @@
 
                 <tr>
                     <td></td>
-                    <td colspan="2" class="pb32 fs10">Cuanto más ajustes tu situación geográfica más fácil será para el resto de usuarios localizarte.</td>
+                    <td colspan="2" class="pb16 fs10">Cuanto más ajustes tu situación geográfica más fácil será para el resto de usuarios localizarte.</td>
                 </tr>                                
                 
                 <tr>
-                    <td>{{ form_label(form.perfiles.tipo_perfil) }}</td>
-                    <td>{{ form_widget(form.perfiles.tipo_perfil) }}</td>
-                    <td>{{ form_errors(form.perfiles.tipo_perfil) }}</td>
+                    <td class="pb16">{{ form_label(form.perfiles.tipo_perfil) }}</td>
+                    <td class="pb16">{{ form_widget(form.perfiles.tipo_perfil) }}</td>
+                    <td class="pb16">{{ form_errors(form.perfiles.tipo_perfil) }}</td>
                 </tr>            
 
+               <tr>
+                    <td ></td>
+                    <td colspan="2">
+                        <p class="bold">{{ form_label(form.perfiles.intro) }}</p>
+                        {{ form_widget(form.perfiles.intro) }}
+                        {{ form_errors(form.perfiles.intro) }}
+                    </td>
+                </tr>
 
-
+                <tr>
+                    <td></td>
+                    <td colspan="2" class="pb16 fs10">Describe como eres/sois, que buscas, estas es tu carta de presentación.</td>
+                </tr>                 
+                
                 <tr>
                     <td>{{ form_label(form.condiciones) }}</td>
                     <td>{{ form_widget(form.condiciones) }}</td>
@@ -98,7 +110,7 @@
 
                 <tr>
                     <td></td>
-                    <td colspan="2" class="pb32 fs10">Léete las <a class="divPop" rel='#wrapper' href="/wrappers/condicionesdeuso.html">condiciones de uso</a></td>
+                    <td colspan="2" class="pb16 fs10">Léete las <a class="divPop" rel='#wrapper' href="/wrappers/condicionesdeuso.html">condiciones de uso</a></td>
                 </tr>                 
                 
                 <tr>
