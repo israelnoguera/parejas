@@ -43,13 +43,13 @@
                 </tr>                
                 
                 <tr>
-                    <td>{{ form_label(form.password.first, 'Contraseña') }}</td>
+                    <td>{{ form_label(form.password.first, 'Contraseña:') }}</td>
                     <td>{{ form_widget(form.password.first) }}</td>
                     <td>{{ form_errors(form.password.first) }}</td>
                 </tr>
 
                 <tr>
-                    <td>{{ form_label(form.password.second, 'Repetir contraseña') }}</td>
+                    <td>{{ form_label(form.password.second, 'Repetite la contraseña:') }}</td>
                     <td>{{ form_widget(form.password.second) }}</td>
                     <td>{{ form_errors(form.password.second) }}</td>
                 </tr>   
@@ -98,7 +98,7 @@
 
                 <tr>
                     <td></td>
-                    <td colspan="2" class="pb32 fs10">Léete las <a href="#">condiciones de uso</a></td>
+                    <td colspan="2" class="pb32 fs10">Léete las <a class="divPop" rel='#wrapper' href="/wrappers/condicionesdeuso.html">condiciones de uso</a></td>
                 </tr>                 
                 
                 <tr>
@@ -115,6 +115,7 @@
             </table>
 
         </form>
+        <br clear='all' />
     </div>
-    
+    <div class="apple_overlay" id="wrapper"><div class='html'></div></div>
 {% endblock body %}

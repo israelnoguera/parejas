@@ -1,7 +1,9 @@
 security:
   
     firewalls:
-        secured_area:
+      
+      #Firewall principal
+        frontend:
             pattern:    ^/
             anonymous:  ~
             form_login:

@@ -13,11 +13,11 @@ class UsuarioType extends AbstractType{
         
         $builder
             ->add('username', 'text', array('label' => 'Nombre de usuario'))
-            ->add('email', 'email')
+            ->add('email', 'email',array('label' => 'Introduce un email válido:'))
             ->add('password', 'repeated', array('type' => 'password'))
             ->add('perfiles', new PerfilesType())
             ->add('condiciones','checkbox',array(
-                'label' => 'Acepto las condiciones de uso',
+                'label' => 'Acepta las condiciones de uso',
                 'required' => true,
             ));
         

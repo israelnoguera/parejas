@@ -1,59 +1,23 @@
 $('document').ready(function(){
     
-    var form = $('#registroForm');
-    if(form.length > 0){
-        $('#usuario_perfiles_pais_id').change(function(){
-            
-            $('#usuario_perfiles_pais_id option:selected').each(function () {
-                id_pais = $(this).val();
-            }); 
-            
-            $.ajax({
-                type: "POST",
-                url: "/webservices/getProvinciasByIdPais",
-                async:false,
-                dataType: 'json',
-                data: "id="+id_pais,
-                success: function(data){
-                    var prov = form.find('#usuario_perfiles_provincia_id');
-                    prov.html('');
+    $(function() {
+        //$("a[rel='overlay']").overlay({mask: '#000', effect: 'apple'});
+    });
 
-                    $.each( data, function(k, v){
-                       prov.append('<option value="'+v.id+'">'+v.provincia+'</option>');
-                    });
-                }
-            });            
-
-        });
-        
-        $('#usuario_perfiles_provincia_id').change(function(){
-            
-            $('#usuario_perfiles_provincia_id option:selected').each(function () {
-                id_provincia = $(this).val();
-            }); 
-            
-            $.ajax({
-                type: "POST",
-                url: "/webservices/getLocalidadesByIdProvincia",
-                async:false,
-                dataType: 'json',
-                data: "id="+id_provincia,
-                success: function(data){
-                    var prov = form.find('#usuario_perfiles_localidad_id');
-                    prov.html('');
-
-                    $.each( data, function(k, v){
-                       prov.append('<option value="'+v.id+'">'+v.localidad+'</option>');
-                    });
-                }
-            });            
-
-        });        
-
-  
-    }    
-    
-
+    /*FACEBOX WRAPPER*/
+    $(".divPop").overlay({
+        mask: {color: '#000',effect: 'apple',loadSpeed: 200,opacity: 0.8}, 
+        onBeforeLoad: function() {
+            $("DIV#wrapper").css("width","500px"); 
+            // En esta caso el id del div overlay se obtiene por defecto del atributo REL del lanzador (trigger) 
+            var wrap = this.getOverlay().find(".html");
+            // Se obtiene la url del atributo href del lanzador, en este caso el elemento que contenga la clase divPop
+            wrap.load(this.getTrigger().attr("href")); 
+        },
+        onClose:function() {
+            //void
+        } 
+    });
+    /*FACEBOX WRAPPER*/
 
 });
-

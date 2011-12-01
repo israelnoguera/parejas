@@ -20,18 +20,24 @@ class PerfilesType extends AbstractType{
                     ->add('orderBy', 'p.pais ASC');                
              },                
             'property' => 'pais', 
-            'label'=>'Pais:'))                     
+            'label'=>'Selecciona un pais:'))                     
             ->add('provincia_id', 'choice', array(
-                    'choices'   => array('1' => 'Selecciona un pais'),
-                    'required'  => false,            
+                    'choices'   => array('0' => 'Selecciona un pais'),
+                    'required'  => false,
+                    'empty_value' => false,
+                    'label' => 'Selecciona una provincia:'
                 ))
             ->add('localidad_id', 'choice', array(
-                    'choices'   => array('1' => 'Selecciona una provincia'),
-                    'required'  => false,            
+                    'choices'   => array('0' => 'Selecciona una provincia'),
+                    'required'  => false,
+                    'empty_value' => false,
+                    'label' => 'Selecciona una localidad:'
                 ))                                          
             ->add('tipo_perfil', 'choice', array(
                 'choices'   => array('1' => 'Somos pareja', '2' => 'Soy un chico solo', '3' => 'Soy una chica sola'),
-                'required'  => false,
+                'required'  => true,
+                'empty_value' => false,
+                'label' => 'Selecciona el tipo de perfil:'
                 ));
         
     }
