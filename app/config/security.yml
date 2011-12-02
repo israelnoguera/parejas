@@ -1,5 +1,8 @@
 security:
-  
+    role_hierarchy:
+        ROLE_ADMIN:       ROLE_USER
+        ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+        
     firewalls:
       
       #Firewall principal
@@ -39,5 +42,3 @@ security:
             iterations: 1
             encode_as_base64: false
         NV\ParejasBundle\Entity\Usuarios: plaintext 
-        
-        #sha512

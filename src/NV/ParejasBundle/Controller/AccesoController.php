@@ -13,6 +13,13 @@ use NV\ParejasBundle\Entity\Perfiles;
 class AccesoController extends Controller{
     
     public function loginAction(){
+        
+        //Redirección a la home para usuarios que acceden al apartado de login y ya están logueados
+        if ($this->get('security.context')->isGranted('IS_AUTHENTICATED_FULLY') === true) {
+            return $this->redirect($this->generateUrl('home'));
+        }        
+        
+        //tratamiento de los parámetros recibidos del form de login
         if ($this->get('request')->attributes->has(SecurityContext::AUTHENTICATION_ERROR)) {
             $error = $this->get('request')->attributes->get(SecurityContext::AUTHENTICATION_ERROR);
         } else {

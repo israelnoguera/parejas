@@ -1,3 +1,3 @@
 editar_perfil:
-    pattern:  /
-    defaults: { _controller: NVParejasBundle:editarPerfil:index }
+    pattern:  /editarperfil
+    defaults: { _controller: NVParejasBundle:Perfil:editar }

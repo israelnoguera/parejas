@@ -2,9 +2,9 @@ public:
     resource: "@NVParejasBundle/Resources/config/public_routing.yml"
     prefix:   /
     
-#private:
-#    resource: "@NVParejasBundle/Resources/config/private_routing.yml"
-#    prefix:   / 
+private:
+    resource: "@NVParejasBundle/Resources/config/private_routing.yml"
+    prefix:   / 
 #    
 #admin:
 #    resource: "@NVParejasBundle/Resources/config/admin_routing.yml"
