@@ -290,7 +290,7 @@ footer{
     filter: dropshadow(color=#000000, offx=0, offy=1);    
 }
     /* BOTONES */
-    input[type="submit"]{
+    input[type="submit"],button{
         background-color: #4D90FE;
         border: 1px solid rgba(0, 0, 0, 0.1);
         border-radius: 2px 2px 2px 2px;
@@ -302,7 +302,7 @@ footer{
         padding: 0 8px;
         text-align: center;
     }
-    input[type="submit"]:hover{
+    input[type="submit"]:hover,button:hover{
         background-color:#3883FE;
         color:#FFF;
         box-shadow:0 1px 1px rgba(0,0,0,0.1);

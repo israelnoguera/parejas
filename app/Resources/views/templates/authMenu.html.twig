@@ -2,21 +2,21 @@
     {% if app.user %}
         <ul id="auth">
             <li>
-                <p id="username">{{ app.user.username | lower | capitalize }}</p>
-                {% if is_granted('ROLE_USER') %}
-                    <p><b>404 creditos</b></p>
-                {% elseif is_granted('ROLE_PREMIUM') %}
-                    <p>PREMIUM</p>
-                {% elseif is_granted('ROLE_ADMIN') %}
-                    <p>ADMIN</p>
-                {% endif %}
-                <p><a href="{{ path('logout') }}">Finalizar sesión</a></p>                                                   
+            avisos
             </li><li>
-                <input type="submit" value="Administrar"></input>
+                <button>{{ app.user.username | lower | capitalize }}</button>
                 <ul id="authAdminMenu">
+                    {% if is_granted('ROLE_USER') %}
+                        <li>Usuario estandar</li>
+                    {% elseif is_granted('ROLE_PREMIUM') %}
+                        <li>Usuarios Premium</li>
+                    {% elseif is_granted('ROLE_ADMIN') %}
+                        <li>Administrador</li>
+                    {% endif %}
                     <li>Perfil</li>
                     <li>Fotos</li>
                     <li>Mensajes</li>
+                    <li><a href="{{ path('logout') }}">Finalizar sesión</a></li>
                 </ul>
             </li>
         </ul>
