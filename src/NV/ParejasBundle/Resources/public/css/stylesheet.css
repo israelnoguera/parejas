@@ -89,12 +89,12 @@ header{
         color:#FFCC00;
         margin:0 0 3px 0;
     }
-    #authMenu #auth li{
+    #authMenu #auth > li{
         float:left;
         width: 110px;
         height: 70px;
     }
-    #authMenu #auth li:first-child{
+    #authMenu #auth > li:first-child{
         width: 270px;
     }
     
@@ -127,6 +127,23 @@ header{
         -moz-border-radius: 3px;
         border-radius: 3px;    
     } 
+    
+    #authAdminMenu{
+        position:absolute;
+        top:44px;
+        right:10px;
+        width:160px;
+        background:red;
+        margin:0;
+        padding:0;
+        list-style: none;
+        -webkit-border-radius: 3px;
+        -moz-border-radius: 3px;
+        border-radius: 3px;         
+    }
+    #authAdminMenu > li{
+        height:26px;
+    }
     /* END AUTH MENU */
 
     /* MAIN MENU */
@@ -274,10 +291,10 @@ footer{
 }
     /* BOTONES */
     input[type="submit"]{
-        background-color: #F5F5F5;
+        background-color: #4D90FE;
         border: 1px solid rgba(0, 0, 0, 0.1);
         border-radius: 2px 2px 2px 2px;
-        color: #666666;
+        color: #FFF;
         font:11px/27px arial,sans-serif;
         font-weight: bold;
         height: 29px;
@@ -286,9 +303,8 @@ footer{
         text-align: center;
     }
     input[type="submit"]:hover{
-        background-color:#f8f8f8;
-        border:solid 1px #c6c6c6;
-        color:#333333;
+        background-color:#3883FE;
+        color:#FFF;
         box-shadow:0 1px 1px rgba(0,0,0,0.1);
     }
     /* END BOTONES */
