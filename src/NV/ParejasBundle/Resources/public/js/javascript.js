@@ -4,6 +4,17 @@ $('document').ready(function(){
         //$("a[rel='overlay']").overlay({mask: '#000', effect: 'apple'});
     });
 
+    $('#authMenu > button').click(function(){
+        var authMenuAdmin = $(this).next();
+        authMenuAdmin.slideToggle('fast',function(){
+            $('body').click(function(e){
+                if (e.target.id != "authAdminMenu" && $(e.target).parents("#authMenu").length<1 ) {
+                    authMenuAdmin.slideUp('fast');
+                }
+            })
+        });
+    })
+
     /*FACEBOX WRAPPER*/
     $(".divPop").overlay({
         mask: {color: '#000',effect: 'apple',loadSpeed: 200,opacity: 0.8}, 

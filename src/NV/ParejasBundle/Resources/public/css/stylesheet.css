@@ -72,46 +72,7 @@ header{
         width: 380px;
         height: 70px;
         color:#fff;
-    }
-    
-    #authMenu #username{
-        font-size: 18px;
     }   
-    
-    #authMenu #auth{
-        width:380px;
-        height: 70px;
-        list-style: none;
-    }  
-    #authMenu #auth b{
-        display: inline-block;
-        font-size: 18px;
-        color:#FFCC00;
-        margin:0 0 3px 0;
-    }
-    #authMenu #auth > li{
-        float:left;
-        width: 110px;
-        height: 70px;
-    }
-    #authMenu #auth > li:first-child{
-        width: 270px;
-    }
-    
-    #authMenu #auth input[type='submit']{
-        margin:12px 10px 0 0;
-    }    
-
-    #authMenu a:hover,
-    #authMenu a:visited,
-    #authMenu a:link{
-        text-decoration: none;
-        color:#e1a401;
-    }
-
-    #authMenu a:hover{
-        text-decoration: underline;
-    }
 
     #authMenu form{
         width: 380px;
@@ -129,20 +90,42 @@ header{
     } 
     
     #authAdminMenu{
+        display: none;
         position:absolute;
-        top:44px;
-        right:10px;
+        top:34px;
+        right:0;
         width:160px;
-        background:red;
+        background:#E4E4E4;
         margin:0;
         padding:0;
         list-style: none;
         -webkit-border-radius: 3px;
         -moz-border-radius: 3px;
-        border-radius: 3px;         
+        border-radius: 3px;
+        -webkit-box-shadow: 0px 0px 8px #000;
+        -moz-box-shadow: 0px 0px 8px #000;
+        box-shadow: 0px 0px 8px #000;         
     }
     #authAdminMenu > li{
         height:26px;
+        border-bottom:solid 1px #F2F2F2;
+    }
+    #authAdminMenu > li:last-child{
+        border-bottom:none;
+    }
+    #authAdminMenu a{
+        display:block;
+        width: 152px;
+        height: 26px;
+        line-height: 26px;
+        color:#000;
+        -webkit-border-radius: 3px;
+        -moz-border-radius: 3px;
+        border-radius: 3px;        
+        padding-right:8px;
+    }
+    #authAdminMenu a:hover{
+        background:#DADADA;
     }
     /* END AUTH MENU */
 

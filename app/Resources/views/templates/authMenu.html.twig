@@ -1,25 +1,21 @@
 <div id="authMenu">
     {% if app.user %}
-        <ul id="auth">
-            <li>
-            avisos
-            </li><li>
-                <button>{{ app.user.username | lower | capitalize }}</button>
-                <ul id="authAdminMenu">
-                    {% if is_granted('ROLE_USER') %}
-                        <li>Usuario estandar</li>
-                    {% elseif is_granted('ROLE_PREMIUM') %}
-                        <li>Usuarios Premium</li>
-                    {% elseif is_granted('ROLE_ADMIN') %}
-                        <li>Administrador</li>
-                    {% endif %}
-                    <li>Perfil</li>
-                    <li>Fotos</li>
-                    <li>Mensajes</li>
-                    <li><a href="{{ path('logout') }}">Finalizar sesión</a></li>
-                </ul>
-            </li>
+
+        <button>{{ app.user.username | lower | capitalize }}</button>
+        <ul id="authAdminMenu">
+            {% if is_granted('ROLE_USER') %}
+                <li><a href="{{ path('logout') }}">Usuario estandar</a></li>
+            {% elseif is_granted('ROLE_PREMIUM') %}
+                <li><a href="{{ path('logout') }}">Usuarios Premium</a></li>
+            {% elseif is_granted('ROLE_ADMIN') %}
+                <li><a href="{{ path('logout') }}">Administrador</a></li>
+            {% endif %}
+            <li><a href="{{ path('logout') }}">Perfil</a></li>
+            <li><a href="{{ path('logout') }}">Fotos</a></li>
+            <li><a href="{{ path('logout') }}">Mensajes</a></li>
+            <li><a href="{{ path('logout') }}">Finalizar sesión</a></li>
         </ul>
+
     {% else %}
                                 
         <form action="{{ path("login_check") }}" method="post" id="login">
