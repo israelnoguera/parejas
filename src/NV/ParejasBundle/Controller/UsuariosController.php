@@ -11,7 +11,7 @@ class UsuariosController extends Controller{
         //CONSULTA MEDIANTE DQL Y REPOSITORIO (metodo aconsejado)
         $em = $this->getDoctrine()->getEntityManager();
         $usuarios = $em->getRepository('NVParejasBundle:Usuarios')
-            ->findAllOrderedById();
+            ->findAllUsers();
 
         $arrParams = array(
             'mainmenu' => 'usuarios',
