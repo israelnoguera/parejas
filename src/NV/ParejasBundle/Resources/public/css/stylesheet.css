@@ -31,7 +31,8 @@ a:link, a:visited, a:hover{
 
 .wSmall{width:220px;}
 .wMedium{width:488px;}
-.wBig{width:948px;}
+.wBig{width:718px;}
+.wAll{width:948px;}
 
 .pt8{padding-top:8px;}
 .pr8{padding-right:8px;}
@@ -293,3 +294,15 @@ footer{
     /* END BOTONES */
     
 /* END DISEÑO */
+
+/* WRAPPERS */
+#sugerencias-texto-introductorio{
+    height:390px;
+    overflow:auto;
+}
+#sugerencias-texto-introductorio li{
+    line-height: 16px;
+    font-size: 12px;
+    padding-bottom: 4px;
+}
+/* WRAPPERS */

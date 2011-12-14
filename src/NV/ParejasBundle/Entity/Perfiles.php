@@ -61,6 +61,10 @@ class Perfiles{
         $this->tipo_perfil = $tipoPerfil;
     }
 
+    /**
+     * 1 = pareja, 2 = chico, 3 = chica
+     * @return integer
+     */
     public function getTipoPerfil(){
         return $this->tipo_perfil;
     }

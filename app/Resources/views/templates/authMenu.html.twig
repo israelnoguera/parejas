@@ -10,7 +10,7 @@
             {% elseif is_granted('ROLE_ADMIN') %}
                 <li><a href="{{ path('logout') }}">Administrador</a></li>
             {% endif %}
-            <li><a href="{{ path('logout') }}">Perfil</a></li>
+            <li><a href="{{ path('editar_perfil') }}">Editar perfil</a></li>
             <li><a href="{{ path('logout') }}">Fotos</a></li>
             <li><a href="{{ path('logout') }}">Mensajes</a></li>
             <li><a href="{{ path('logout') }}">Finalizar sesión</a></li>
