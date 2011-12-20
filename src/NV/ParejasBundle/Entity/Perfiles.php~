@@ -31,7 +31,7 @@ class Perfiles{
     protected $fh_alta;     
     
     /**
-    * @ORM\Column(type="datetime",nullable=true)    
+    * @ORM\Column(type="datetime")    
     */
     protected $fh_editado;    
     
@@ -79,11 +79,6 @@ class Perfiles{
     /*
      * SETTERS Y GETTERS
      */
-    
-    public function __construct(){
-        $this->fh_alta = new \DateTime("now");
-        $this->estado = 1;
-    }    
     
     public function getId(){
         return $this->id;
@@ -189,105 +184,5 @@ class Perfiles{
     public function getIntro()
     {
         return $this->intro;
-    }
-
-    /**
-     * Set fh_alta
-     *
-     * @param datetime $fhAlta
-     */
-    public function setFhAlta($fhAlta)
-    {
-        $this->fh_alta = $fhAlta;
-    }
-
-    /**
-     * Get fh_alta
-     *
-     * @return datetime 
-     */
-    public function getFhAlta()
-    {
-        return $this->fh_alta;
-    }
-
-    /**
-     * Set fh_editado
-     *
-     * @param datetime $fhEditado
-     */
-    public function setFhEditado($fhEditado)
-    {
-        $this->fh_editado = $fhEditado;
-    }
-
-    /**
-     * Get fh_editado
-     *
-     * @return datetime 
-     */
-    public function getFhEditado()
-    {
-        return $this->fh_editado;
-    }
-
-    /**
-     * Set estado
-     *
-     * @param integer $estado
-     */
-    public function setEstado($estado)
-    {
-        $this->estado = $estado;
-    }
-
-    /**
-     * Get estado
-     *
-     * @return integer 
-     */
-    public function getEstado()
-    {
-        return $this->estado;
-    }
-
-    /**
-     * Set que_busco
-     *
-     * @param string $queBusco
-     */
-    public function setQueBusco($queBusco)
-    {
-        $this->que_busco = $queBusco;
-    }
-
-    /**
-     * Get que_busco
-     *
-     * @return string 
-     */
-    public function getQueBusco()
-    {
-        return $this->que_busco;
-    }
-
-    /**
-     * Set para_que
-     *
-     * @param string $paraQue
-     */
-    public function setParaQue($paraQue)
-    {
-        $this->para_que = $paraQue;
-    }
-
-    /**
-     * Get para_que
-     *
-     * @return string 
-     */
-    public function getParaQue()
-    {
-        return $this->para_que;
     }
 }

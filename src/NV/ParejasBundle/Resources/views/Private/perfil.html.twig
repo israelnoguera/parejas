@@ -4,22 +4,90 @@
 
     <br clear="all" />
     
+    <form id="editaPerfilForm" action="{{ path('editar_perfil') }}" method="post" {{ form_enctype(formbasico) }}>
+    
     <section class="blackWindow left wMedium">
-            <h1>Introducción</h1>
-            <h2>{{ lang.introh2 }} <a class="divPop" rel='#wrapper' href="/wrappers/sugerencias-perfil-introductorio.html">Sugerencias</a></h2>
+            <hgroup>
+                <h1>Introducción</h1>
+                <h2>{{ lang.introh2 }} <a class="divPop" rel='#wrapper' href="/wrappers/sugerencias-perfil-introductorio.html">Sugerencias</a></h2>
+            </hgroup>
             <br clear="all" />
             
-            <p>w</p>
-            <p>w</p>
-            <p>w</p>
-            <p>w</p>
+            <p>{{ perfil.paisId }}</p>
+            
+            <table id="editaperfil">             
+
+               <tr>
+                    <td colspan="2">
+                        <p class="bold">{{ form_label(formbasico.intro) }}</p>
+                        <p>{{ form_widget(formbasico.intro,{ 'value': perfil.intro }) }}</p>
+                        {{ form_errors(formbasico.intro) }}
+                    </td>
+                </tr>
+
+                <tr>
+                    <td colspan="2" class="pb16 fs10">Describe como eres/sois, que buscas, estas es tu carta de presentación.</td>
+                </tr>                
+                
+            <tr>
+                <td class="pt8">
+                    <p class="bold">{{ form_label(formbasico.pais_id) }}</p>
+                    {{ form_widget(formbasico.pais_id,{ 'attr': {'preferred_choices':perfil.paisId} }) }}
+                </td>
+                <td class="pt8">{{ form_errors(formbasico.pais_id) }}</td>
+            </tr>
+
+            <tr>
+                <td colspan="2" class="pb8 fs10">Este será el identificador/alias de tu cuenta y servirá para que el resto de usuarios te localice. No utilices caracteres extraños ni espacios. Por ejemplo: pareja.xtrema, morboparvalencia, romeo_swing, jon-bea-liberales.</td>
+            </tr> 
+            
+
+            <tr>
+                <td class="pt8">
+                    <p class="bold">{{ form_label(formbasico.provincia_id) }}</p>
+                    {{ form_widget(formbasico.provincia_id) }}</td>
+                <td class="pt8">{{ form_errors(formbasico.provincia_id) }}</td>
+            </tr>
+
+            <tr>
+                <td colspan="2" class="pb8 fs10">Este será el identificador/alias de tu cuenta y servirá para que el resto de usuarios te localice. No utilices caracteres extraños ni espacios. Por ejemplo: pareja.xtrema, morboparvalencia, romeo_swing, jon-bea-liberales.</td>
+            </tr> 
+            
+
+            <tr>
+                <td class="pt8">
+                    <p class="bold">{{ form_label(formbasico.localidad_id) }}</p>
+                    {{ form_widget(formbasico.localidad_id) }}
+                </td>
+                <td class="pt8">{{ form_errors(formbasico.localidad_id) }}</td>
+            </tr>
+
+            <tr>
+                <td colspan="2" class="pb8 fs10">Este será el identificador/alias de tu cuenta y servirá para que el resto de usuarios te localice. No utilices caracteres extraños ni espacios. Por ejemplo: pareja.xtrema, morboparvalencia, romeo_swing, jon-bea-liberales.</td>
+            </tr>             
+
+           <tr>
+                <td colspan="2"><input type="submit" value="Actualizar" /></td>
+            </tr>                 
+
+            <tr>
+                <td>{{ form_errors(formbasico) }}</td>
+                <td>{{ form_errors(formbasico._token) }}</td>
+                <td>{{ form_widget(formbasico._token) }}</td>
+            </tr>             
+            
+            </table>
+            {#            
             <button>Test de compatibilidad</button> Ajusta tus preferencias<br />
             <button>Formulario de compatibilidad</button> ¿Qué estás buscando?
+            #}
     </section>
     
     <section class="redWindow left wSmall">
-        <h1>Básico</h1>
-            <h2><a class="divPop" rel='#wrapper' href="/wrappers/detalles-perfil-ayuda.html">Ayuda</a></h2>
+            <hgroup>
+                <h1>Básico</h1>
+                <h2><a class="divPop" rel='#wrapper' href="/wrappers/detalles-perfil-ayuda.html">Ayuda</a></h2>
+            </hgroup>
             <br clear="all" /></br>
         <p>s</p>
         <p>s</p>
@@ -36,6 +104,8 @@
         <p>ss</p>
         <p>s</p>
     </section>      
+        
+    </form>
     
     <div class="apple_overlay" id="wrapper"><div class='html'></div></div>
     

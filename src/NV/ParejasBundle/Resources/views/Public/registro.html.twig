@@ -120,10 +120,13 @@
                 </tr>                 
 
                 <tr>
-                    <td colspan="3">{{ form_errors(form) }}</td>
-                </tr>
-                {{ form_errors(form._token) }}
-                {{ form_widget(form._token) }}
+                    <td>{{ form_errors(form) }}</td>
+                    <td>{{ form_errors(form._token) }}</td>
+                    <td>{{ form_widget(form._token) }}</td>
+                </tr>                
+                
+                {{ form_rest(form) }}
+                
             </table>
 
         </form>
