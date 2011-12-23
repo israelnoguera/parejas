@@ -1,0 +1,5 @@
+parejas:
+    profile:
+        introduction: "Explicar lo que buscas, cómo eres, aficiones…|Explicar lo que buscáis, como sóis, aficiones…"
+        description:  "Describe cómo eres: ésta es tu carta de presentación.|Describe cómo sois: ésta es vuestra carta de presentación."
+        alias:        "Este será el identificador/alias de tu cuenta y servirá para que el resto de usuarios te localice. No utilices caracteres extraños ni espacios. Por ejemplo: pareja.xtrema, morboparvalencia, romeo_swing, jon-bea-liberales."

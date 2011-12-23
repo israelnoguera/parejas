@@ -1,5 +1,6 @@
+DirectoryIndex app_dev.php
 <IfModule mod_rewrite.c>
     RewriteEngine On
     RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteRule ^(.*)$ app_dev.php [QSA,L]
+    RewriteRule . / [QSA,L]
 </IfModule>

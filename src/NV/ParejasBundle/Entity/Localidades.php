@@ -15,8 +15,8 @@ class Localidades
     /**
      * @var integer $id
      *
-     * @ORM\Column(name="id", type="integer")
      * @ORM\Id
+     * @ORM\Column(name="id", type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
@@ -42,11 +42,10 @@ class Localidades
      */
     private $localidad;
 
-
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -66,7 +65,7 @@ class Localidades
     /**
      * Get pais_id
      *
-     * @return integer 
+     * @return integer
      */
     public function getPaisId()
     {
@@ -86,7 +85,7 @@ class Localidades
     /**
      * Get provincia_id
      *
-     * @return integer 
+     * @return integer
      */
     public function getProvinciaId()
     {
@@ -106,7 +105,7 @@ class Localidades
     /**
      * Get localidad
      *
-     * @return string 
+     * @return string
      */
     public function getLocalidad()
     {

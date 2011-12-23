@@ -2,8 +2,10 @@
 
 namespace NV\ParejasBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use NV\ParejasBundle\Entity\Usuarios;
 
 /**
  * NV\ParejasBundle\Entity\Perfiles
@@ -11,61 +13,65 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="NV\ParejasBundle\Repository\PerfilesRepository")
  */
-class Perfiles{          
-    
+class Perfiles
+{
     /**
-     * @ORM\OneToOne(targetEntity="Usuarios", inversedBy="perfiles")
-     */
-    protected $usuario;          
-    
-    /**
-     * @ORM\Column(name="id", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     protected $id;
 
     /**
-    * @ORM\Column(type="datetime")    
-    */
-    protected $fh_alta;     
-    
-    /**
-    * @ORM\Column(type="datetime",nullable=true)    
-    */
-    protected $fh_editado;    
-    
-    /**
-    * @ORM\Column(type="integer",columnDefinition="TINYINT(1) NULL")
-    * @Assert\NotBlank()
-    */
-    protected $estado;      
-    
-    /**
-     * @ORM\Column(name="pais_id", type="integer")
+     * @var Usuarios
+     * @ORM\OneToOne(targetEntity="Usuarios", inversedBy="perfiles")
      */
-    protected $pais_id;    
-    
+    protected $usuario;
+
     /**
-     * @ORM\Column(name="provincia_id", type="integer")
+     * @ORM\Column(type="datetime")
+     */
+    protected $fh_alta;
+
+    /**
+     * @ORM\Column(type="datetime",nullable=true)
+     */
+    protected $fh_editado;
+
+    /**
+     * @ORM\Column(type="integer",columnDefinition="TINYINT(1) NULL")
+     * @Assert\NotBlank()
+     */
+    protected $estado;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Paises")
+     * @ORM\JoinColumn(name="pais_id")
+     */
+    protected $pais_id;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Provincias")
+     * @ORM\JoinColumn(name="provincia_id")
      */
     protected $provincia_id;
 
     /**
-     * @ORM\Column(name="localidad_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="Localidades")
+     * @ORM\JoinColumn(name="localidad_id")
      */
-    protected $localidad_id;   
-    
+    protected $localidad_id;
+
     /**
      * @ORM\Column(name="tipo_perfil", type="smallint")
      */
-    protected $tipo_perfil; 
-    
+    protected $tipo_perfil;
+
     /**
      * @ORM\Column(name="intro", type="text", nullable=true)
      */
-    protected $intro;  
-    
+    protected $intro;
+
     /**
      * @ORM\Column(name="que_busco", type="string", length=50, nullable=true)
      */
@@ -74,22 +80,24 @@ class Perfiles{
     /**
      * @ORM\Column(name="para_que", type="string", length=50, nullable=true)
      */
-    protected $para_que;    
-    
+    protected $para_que;
+
+    public function __construct()
+    {
+        $this->fh_alta = new DateTime;
+        $this->estado  = 1;
+    }
+
     /*
      * SETTERS Y GETTERS
      */
-    
-    public function __construct(){
-        $this->fh_alta = new \DateTime("now");
-        $this->estado = 1;
-    }    
-    
-    public function getId(){
+    public function getId()
+    {
         return $this->id;
-    }  
-    
-    public function setTipoPerfil($tipoPerfil){
+    }
+
+    public function setTipoPerfil($tipoPerfil)
+    {
         $this->tipo_perfil = $tipoPerfil;
     }
 
@@ -97,34 +105,44 @@ class Perfiles{
      * 1 = pareja, 2 = chico, 3 = chica
      * @return integer
      */
-    public function getTipoPerfil(){
+    public function getTipoPerfil()
+    {
         return $this->tipo_perfil;
     }
-    
-    public function setUsuario(\NV\ParejasBundle\Entity\Usuarios $usuario){
+
+    /**
+     * Is profile single or couple?
+     * @return bool
+     */
+    public function countPeople()
+    {
+        return $this->tipo_perfil === 1 ? 2 : 1;
+    }
+
+    public function setUsuario(Usuarios $usuario)
+    {
         $this->usuario = $usuario;
     }
 
-    public function getUsuario(){
+    public function getUsuario()
+    {
         return $this->usuario;
-    }     
-
+    }
 
     /**
      * Set pais_id
      *
-     * @param integer $paisId
+     * @param Paises $paisId
      */
-    public function setPaisId($paisId)
+    public function setPaisId(Paises $paisId)
     {
         $this->pais_id = $paisId;
-    } 
-    
+    }
 
     /**
      * Get pais_id
      *
-     * @return integer 
+     * @return Paises
      */
     public function getPaisId()
     {
@@ -134,9 +152,9 @@ class Perfiles{
     /**
      * Set provincia_id
      *
-     * @param integer $provinciaId
+     * @param Provincias $provinciaId
      */
-    public function setProvinciaId($provinciaId)
+    public function setProvinciaId(Provincias $provinciaId)
     {
         $this->provincia_id = $provinciaId;
     }
@@ -144,7 +162,7 @@ class Perfiles{
     /**
      * Get provincia_id
      *
-     * @return integer 
+     * @return Provincias
      */
     public function getProvinciaId()
     {
@@ -154,9 +172,9 @@ class Perfiles{
     /**
      * Set localidad_id
      *
-     * @param integer $localidadId
+     * @param Localidades $localidadId
      */
-    public function setLocalidadId($localidadId)
+    public function setLocalidadId(Localidades $localidadId)
     {
         $this->localidad_id = $localidadId;
     }
@@ -164,7 +182,7 @@ class Perfiles{
     /**
      * Get localidad_id
      *
-     * @return integer 
+     * @return Localidades
      */
     public function getLocalidadId()
     {
@@ -184,7 +202,7 @@ class Perfiles{
     /**
      * Get intro
      *
-     * @return text 
+     * @return text
      */
     public function getIntro()
     {
@@ -204,7 +222,7 @@ class Perfiles{
     /**
      * Get fh_alta
      *
-     * @return datetime 
+     * @return datetime
      */
     public function getFhAlta()
     {
@@ -224,7 +242,7 @@ class Perfiles{
     /**
      * Get fh_editado
      *
-     * @return datetime 
+     * @return datetime
      */
     public function getFhEditado()
     {
@@ -244,7 +262,7 @@ class Perfiles{
     /**
      * Get estado
      *
-     * @return integer 
+     * @return integer
      */
     public function getEstado()
     {
@@ -264,7 +282,7 @@ class Perfiles{
     /**
      * Get que_busco
      *
-     * @return string 
+     * @return string
      */
     public function getQueBusco()
     {
@@ -284,7 +302,7 @@ class Perfiles{
     /**
      * Get para_que
      *
-     * @return string 
+     * @return string
      */
     public function getParaQue()
     {

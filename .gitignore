@@ -1,3 +1,4 @@
+/app/cache/
+/app/config/parameters.ini
+/app/logs/
 /nbproject/
-/app/cache/*
-/app/logs/*

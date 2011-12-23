@@ -10,16 +10,16 @@ use NV\ParejasBundle\Form\UsuarioType;
 use NV\ParejasBundle\Entity\Usuarios;
 use NV\ParejasBundle\Entity\Perfiles;
 
-class AccesoController extends Controller{
-    
-    public function loginAction(){
-        
-        //Redirección a la home para usuarios que acceden al apartado de login y ya están logueados
+class AccesoController extends Controller
+{
+    public function loginAction()
+    {
+        // Redirección a la home para usuarios que acceden al apartado de login y ya están logueados
         if ($this->get('security.context')->isGranted('IS_AUTHENTICATED_FULLY') === true) {
             return $this->redirect($this->generateUrl('home'));
-        }        
-        
-        //tratamiento de los parámetros recibidos del form de login
+        }
+
+        // Tratamiento de los parámetros recibidos del form de login
         if ($this->get('request')->attributes->has(SecurityContext::AUTHENTICATION_ERROR)) {
             $error = $this->get('request')->attributes->get(SecurityContext::AUTHENTICATION_ERROR);
         } else {
@@ -27,76 +27,62 @@ class AccesoController extends Controller{
         }
 
         return $this->render('NVParejasBundle:Public:login.html.twig', array(
-            'mainmenu'      => 'login',
+            'mainmenu' => 'login',
             'last_username' => $this->get('request')->getSession()->get(SecurityContext::LAST_USERNAME),
-            'error'         => $error,
-        ));        
+            'error' => $error,
+        ));
     }
-    
-    public function registroAction(){
-        
-        $usuario = new Usuarios();        
-     
+
+    public function registroAction()
+    {
+        $usuario = new Usuarios();
         $form = $this->createForm(new UsuarioType(), $usuario);
-
         $request = $this->get('request');
-        if ($request->getMethod() == 'POST') {            
-            
+
+        if ($request->getMethod() === 'POST') {
             $form->bindRequest($request);
-
+            $em = $this->getDoctrine()->getEntityManager();
             if ($form->isValid()) {
-
                 // Mensaje para notificar al usuario que todo ha salido bien
-                $session = $this->get('request')->getSession();
+                $session = $request->getSession();
                 $session->setFlash('notice', 'Gracias por registrarte');
 
-                // Obtenemos el usuario
-                //$form_usuario = $form->getData();                
-                
-                // Codificamos el password
-                /*
-                $factory = $this->get('security.encoder_factory');                
-                $codificador = $factory->getEncoder($usuario);                
-                $password = $codificador->encodePassword($usuario->getPassword(), $usuario->getSalt());
-                $usuario->setPassword($password);
-                 */
-                
-                
-                //relacionamos los dos objetos
-                $usuario->getPerfiles()->setUsuario($usuario);
-                
                 // Guardamos el objeto en base de datos
-                $em = $this->get('doctrine')->getEntityManager();
-                $em->persist($usuario); //persistiendo el objeto usuario
-                $em->persist($usuario->getPerfiles()); //persistiendo el objeto perfiles
+                $em->persist($usuario);
+
+                // Relacionamos los dos objetos
+                $perfil = $usuario->getPerfiles();
+                $perfil->setUsuario($usuario);
+                $em->persist($perfil);
+
                 $em->flush();
 
                 // Logueamos al usuario
                 $token = new UsernamePasswordToken($usuario, null, 'main', $usuario->getRoles());
                 $this->get('security.context')->setToken($token);
 
-                $mailParams = array(
-                    "usuario" => $usuario
-                );
-                
+                /*
                 $mensaje = \Swift_Message::newInstance()
                     ->setSubject('Bienvenido a parejas.com')
                     ->setFrom('hola@parejas.com')
                     ->setTo($usuario->getEmail())
-                    ->setBody($this->renderView('NVParejasBundle:Email:registro.html.twig',$mailParams));
-                $this->get('mailer')->send($mensaje);                
+                    ->setBody($this->renderView('NVParejasBundle:Email:registro.html.twig', array(
+                        'usuario' => $usuario,
+                    )));
+                $this->get('mailer')->send($mensaje);
+                 */
 
                 return $this->redirect($this->generateUrl('bienvenido'));
-
             }
-        }      
-        
-        return $this->render('NVParejasBundle:Public:registro.html.twig', array('form' => $form->createView()));
-    }
-    
-    public function bienvenidoAction(){
-        return $this->render('NVParejasBundle:Public:bienvenido.html.twig');
-    }    
+        }
 
-    
+        return $this->render('NVParejasBundle:Public:registro.html.twig', array(
+            'form' => $form->createView(),
+        ));
+    }
+
+    public function bienvenidoAction()
+    {
+        return $this->render('NVParejasBundle:Public:bienvenido.html.twig');
+    }
 }

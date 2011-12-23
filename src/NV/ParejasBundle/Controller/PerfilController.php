@@ -9,12 +9,13 @@ use NV\ParejasBundle\Entity\Perfiles;
 use NV\ParejasBundle\Form\EditaPerfilType;
 
 class PerfilController extends Controller{
-    
-    public function editarAction(){
+
+    public function editarAction()
+    {
         // Redirección a la home para usuarios que no están logueados o les finaliza la sesión
         if ($this->get('security.context')->isGranted('IS_AUTHENTICATED_FULLY') === false) {
             return $this->redirect($this->generateUrl('home'));
-        } 
+        }
 
         // Recuperamos los datos del usuarios loguerado
         $usuario = $this->get('security.context')->getToken()->getUser();
@@ -27,12 +28,11 @@ class PerfilController extends Controller{
 
         $arrParams = array(
             'formbasico' => $formBasico->createView(),
-            'mainmenu' => 'editarperfil',
-            'perfil' => $perfil,
-            'lang' => $tipoperfil > 1 ? Dictionary::getLang('single') : Dictionary::getLang(),
+            'mainmenu'   => 'editarperfil',
+            'count'      => $perfil->countPeople(),
         );
 
         return $this->render('NVParejasBundle:Private:perfil.html.twig', $arrParams);
     }
-    
+
 }

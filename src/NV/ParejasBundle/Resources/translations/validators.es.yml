@@ -1,0 +1,6 @@
+parejas:
+    user:
+      email:
+          unique: "Ya existe una cuenta asociada a ese email"
+      username:
+          unique: "El nombre de usuario no está disponible"

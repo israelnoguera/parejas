@@ -1,56 +1,45 @@
 {% extends '::base.html.twig' %}
 
-{% form_theme formbasico _self %}
-{#
-{% block widget_choice_options %}
-{% spaceless %}
-    {% for choice, label in options %}
-            <option value="{{ choice }}"{% if _form_is_choice_selected(form, choice) %} selected="selected"{% endif %}>{{ label|trans }}</option>
-    {% endfor %}
-{% endspaceless %}
-{% endblock widget_choice_options %}
-#}
 {% block body %}
-
     <br clear="all" />
-    
+
     <form id="editaPerfilForm" action="{{ path('editar_perfil') }}" method="post" {{ form_enctype(formbasico) }}>
-    
-    <section class="blackWindow left wMedium">
+
+        <section class="blackWindow left wMedium">
             <hgroup>
                 <h1>Introducción</h1>
-                <h2>{{ lang.introh2 }} <a class="divPop" rel='#wrapper' href="/wrappers/sugerencias-perfil-introductorio.html">Sugerencias</a></h2>
+                <h2>{{ 'parejas.profile.introduction'|transchoice(profileType) }} <a class="divPop" rel='#wrapper' href="/wrappers/sugerencias-perfil-introductorio.html">Sugerencias</a></h2>
             </hgroup>
             <br clear="all" />
-            
+
             <p>{{ perfil.paisId }}</p>
-            
-            <table id="editaperfil">             
+
+            <table id="editaperfil">
 
                <tr>
                     <td colspan="2">
                         <p class="bold">{{ form_label(formbasico.intro) }}</p>
-                        <p>{{ form_widget(formbasico.intro,{ 'value': perfil.intro }) }}</p>
+                        <p>{{ form_widget(formbasico.intro) }}</p>
                         {{ form_errors(formbasico.intro) }}
                     </td>
                 </tr>
 
                 <tr>
-                    <td colspan="2" class="pb16 fs10">Describe como eres/sois, que buscas, estas es tu carta de presentación.</td>
-                </tr>                
-                
+                    <td colspan="2" class="pb16 fs10">{{ 'parejas.profile.description'|transchoice(profileType) }}</td>
+                </tr>
+
             <tr>
                 <td class="pt8">
                     <p class="bold">{{ form_label(formbasico.pais_id) }}</p>
-                    {{ form_widget(formbasico.pais_id,{'empty_data':[73],'empty_value':'kakaka'}) }}
+                    {{ form_widget(formbasico.pais_id) }}
                 </td>
                 <td class="pt8">{{ form_errors(formbasico.pais_id) }}</td>
             </tr>
 
             <tr>
-                <td colspan="2" class="pb8 fs10">Este será el identificador/alias de tu cuenta y servirá para que el resto de usuarios te localice. No utilices caracteres extraños ni espacios. Por ejemplo: pareja.xtrema, morboparvalencia, romeo_swing, jon-bea-liberales.</td>
-            </tr> 
-            
+                <td colspan="2" class="pb8 fs10">{{ 'parejas.profile.country'|transchoice(profileType) }}</td>
+            </tr>
+
 
             <tr>
                 <td class="pt8">
@@ -60,9 +49,9 @@
             </tr>
 
             <tr>
-                <td colspan="2" class="pb8 fs10">Este será el identificador/alias de tu cuenta y servirá para que el resto de usuarios te localice. No utilices caracteres extraños ni espacios. Por ejemplo: pareja.xtrema, morboparvalencia, romeo_swing, jon-bea-liberales.</td>
-            </tr> 
-            
+                <td colspan="2" class="pb8 fs10">{{ 'parejas.profile.province'|transchoice(profileType) }}</td>
+            </tr>
+
 
             <tr>
                 <td class="pt8">
@@ -73,26 +62,26 @@
             </tr>
 
             <tr>
-                <td colspan="2" class="pb8 fs10">Este será el identificador/alias de tu cuenta y servirá para que el resto de usuarios te localice. No utilices caracteres extraños ni espacios. Por ejemplo: pareja.xtrema, morboparvalencia, romeo_swing, jon-bea-liberales.</td>
-            </tr>             
+                <td colspan="2" class="pb8 fs10">{{ 'parejas.profile.city'|transchoice(profileType) }}</td>
+            </tr>
 
            <tr>
-                <td colspan="2"><input type="submit" value="Actualizar" /></td>
-            </tr>                 
+                <td colspan="2"><input type="submit" value="{{ 'parejas.form.update'|trans }}" /></td>
+            </tr>
 
             <tr>
                 <td>{{ form_errors(formbasico) }}</td>
                 <td>{{ form_errors(formbasico._token) }}</td>
                 <td>{{ form_widget(formbasico._token) }}</td>
-            </tr>             
-            
+            </tr>
+
             </table>
-            {#            
+            {#
             <button>Test de compatibilidad</button> Ajusta tus preferencias<br />
             <button>Formulario de compatibilidad</button> ¿Qué estás buscando?
             #}
     </section>
-    
+
     <section class="redWindow left wSmall">
             <hgroup>
                 <h1>Básico</h1>
@@ -104,8 +93,8 @@
         <p>s</p>
         <p>ss</p>
         <p>s</p>
-    </section>    
-    
+    </section>
+
     <section class="redWindow left wSmall">
         small
         <p>s</p>
@@ -113,10 +102,9 @@
         <p>s</p>
         <p>ss</p>
         <p>s</p>
-    </section>      
-        
+    </section>
+
     </form>
-    
+
     <div class="apple_overlay" id="wrapper"><div class='html'></div></div>
-    
 {% endblock body %}
