@@ -20,6 +20,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Output\Output;
 use Symfony\Component\Console\Output\ConsoleOutput;
+use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Command\HelpCommand;
 use Symfony\Component\Console\Command\ListCommand;
@@ -71,25 +72,12 @@ class Application
         $this->catchExceptions = true;
         $this->autoExit = true;
         $this->commands = array();
-        $this->helperSet = new HelperSet(array(
-            new FormatterHelper(),
-            new DialogHelper(),
-        ));
+        $this->helperSet = $this->getDefaultHelperSet();
+        $this->definition = $this->getDefaultInputDefinition();
 
-        $this->add(new HelpCommand());
-        $this->add(new ListCommand());
-
-        $this->definition = new InputDefinition(array(
-            new InputArgument('command', InputArgument::REQUIRED, 'The command to execute'),
-
-            new InputOption('--help',           '-h', InputOption::VALUE_NONE, 'Display this help message.'),
-            new InputOption('--quiet',          '-q', InputOption::VALUE_NONE, 'Do not output any message.'),
-            new InputOption('--verbose',        '-v', InputOption::VALUE_NONE, 'Increase verbosity of messages.'),
-            new InputOption('--version',        '-V', InputOption::VALUE_NONE, 'Display this program version.'),
-            new InputOption('--ansi',           '',   InputOption::VALUE_NONE, 'Force ANSI output.'),
-            new InputOption('--no-ansi',        '',   InputOption::VALUE_NONE, 'Disable ANSI output.'),
-            new InputOption('--no-interaction', '-n', InputOption::VALUE_NONE, 'Do not ask any interactive question.'),
-        ));
+        foreach ($this->getDefaultCommands() as $command) {
+            $this->add($command);
+        }
     }
 
     /**
@@ -121,7 +109,11 @@ class Application
                 throw $e;
             }
 
-            $this->renderException($e, $output);
+            if ($output instanceof ConsoleOutputInterface) {
+                $this->renderException($e, $output->getErrorOutput());
+            } else {
+                $this->renderException($e, $output);
+            }
             $statusCode = $e->getCode();
 
             $statusCode = is_numeric($statusCode) && $statusCode ? $statusCode : 1;
@@ -168,6 +160,13 @@ class Application
 
         if (true === $input->hasParameterOption(array('--no-interaction', '-n'))) {
             $input->setInteractive(false);
+        }
+
+        if (function_exists('posix_isatty') && $this->getHelperSet()->has('dialog')) {
+            $inputStream = $this->getHelperSet()->get('dialog')->getInputStream();
+            if (!posix_isatty($inputStream)) {
+                $input->setInteractive(false);
+            }
         }
 
         if (true === $input->hasParameterOption(array('--quiet', '-q'))) {
@@ -388,6 +387,12 @@ class Application
     {
         $command->setApplication($this);
 
+        if (!$command->isEnabled()) {
+            $command->setApplication(null);
+
+            return;
+        }
+
         $this->commands[$command->getName()] = $command;
 
         foreach ($command->getAliases() as $alias) {
@@ -488,7 +493,7 @@ class Application
             }
 
             if (count($abbrevs[$part]) > 1) {
-                throw new \InvalidArgumentException(sprintf('The namespace "%s" is ambiguous (%s).', $namespace, $this->getAbbreviationSuggestions($abbrevs[$namespace])));
+                throw new \InvalidArgumentException(sprintf('The namespace "%s" is ambiguous (%s).', $namespace, $this->getAbbreviationSuggestions($abbrevs[$part])));
             }
 
             $found[] = $abbrevs[$part][0];
@@ -621,13 +626,31 @@ class Application
     /**
      * Returns a text representation of the Application.
      *
-     * @param string $namespace An optional namespace name
+     * @param string  $namespace An optional namespace name
+     * @param boolean $raw       Whether to return raw command list
      *
      * @return string A string representing the Application
      */
-    public function asText($namespace = null)
+    public function asText($namespace = null, $raw = false)
     {
         $commands = $namespace ? $this->all($this->findNamespace($namespace)) : $this->commands;
+
+        $width = 0;
+        foreach ($commands as $command) {
+            $width = strlen($command->getName()) > $width ? strlen($command->getName()) : $width;
+        }
+        $width += 2;
+
+        if ($raw) {
+            $messages = array();
+            foreach ($this->sortCommands($commands) as $space => $commands) {
+                foreach ($commands as $name => $command) {
+                    $messages[] = sprintf("%-${width}s %s", $name, $command->getDescription());
+                }
+            }
+
+            return implode("\n", $messages);
+        }
 
         $messages = array($this->getHelp(), '');
         if ($namespace) {
@@ -635,12 +658,6 @@ class Application
         } else {
             $messages[] = '<comment>Available commands:</comment>';
         }
-
-        $width = 0;
-        foreach ($commands as $command) {
-            $width = strlen($command->getName()) > $width ? strlen($command->getName()) : $width;
-        }
-        $width += 2;
 
         // add commands by namespace
         foreach ($this->sortCommands($commands) as $space => $commands) {
@@ -795,6 +812,49 @@ class Application
     protected function getCommandName(InputInterface $input)
     {
         return $input->getFirstArgument('command');
+    }
+
+    /**
+     * Gets the default input definition.
+     *
+     * @return InputDefinition An InputDefinition instance
+     */
+    protected function getDefaultInputDefinition()
+    {
+        return new InputDefinition(array(
+            new InputArgument('command', InputArgument::REQUIRED, 'The command to execute'),
+
+            new InputOption('--help',           '-h', InputOption::VALUE_NONE, 'Display this help message.'),
+            new InputOption('--quiet',          '-q', InputOption::VALUE_NONE, 'Do not output any message.'),
+            new InputOption('--verbose',        '-v', InputOption::VALUE_NONE, 'Increase verbosity of messages.'),
+            new InputOption('--version',        '-V', InputOption::VALUE_NONE, 'Display this program version.'),
+            new InputOption('--ansi',           '',   InputOption::VALUE_NONE, 'Force ANSI output.'),
+            new InputOption('--no-ansi',        '',   InputOption::VALUE_NONE, 'Disable ANSI output.'),
+            new InputOption('--no-interaction', '-n', InputOption::VALUE_NONE, 'Do not ask any interactive question.'),
+        ));
+    }
+
+    /**
+     * Gets the default commands that should always be available.
+     *
+     * @return array An array of default Command instances
+     */
+    protected function getDefaultCommands()
+    {
+        return array(new HelpCommand(), new ListCommand());
+    }
+
+    /**
+     * Gets the default helper set with the helpers that should always be available.
+     *
+     * @return HelperSet A HelperSet instance
+     */
+    protected function getDefaultHelperSet()
+    {
+        return new HelperSet(array(
+            new FormatterHelper(),
+            new DialogHelper(),
+        ));
     }
 
     /**

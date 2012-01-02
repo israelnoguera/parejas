@@ -14,7 +14,6 @@ namespace Symfony\Bundle\SwiftmailerBundle\DependencyInjection;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\Config\FileLocator;
 
 /**
@@ -44,7 +43,7 @@ class SwiftmailerExtension extends Extension
         $loader->load('swiftmailer.xml');
         $container->setAlias('mailer', 'swiftmailer.mailer');
 
-        $configuration = new Configuration($container->getParameter('kernel.debug'));
+        $configuration = $this->getConfiguration($configs, $container);
         $config = $this->processConfiguration($configuration, $configs);
 
         if (null === $config['transport']) {
@@ -88,6 +87,8 @@ class SwiftmailerExtension extends Extension
             $loader->load('spool.xml');
             if ($type === 'file') {
                 $loader->load('spool_file.xml');
+            } elseif ($type === 'memory') {
+                $loader->load('spool_memory.xml');
             }
             $container->setAlias('swiftmailer.transport.real', $transport);
             $container->setAlias('swiftmailer.transport', 'swiftmailer.transport.spool');
@@ -145,5 +146,10 @@ class SwiftmailerExtension extends Extension
     public function getNamespace()
     {
         return 'http://symfony.com/schema/dic/swiftmailer';
+    }
+
+    public function getConfiguration(array $config, ContainerBuilder $container)
+    {
+        return new Configuration($container->getParameter('kernel.debug'));
     }
 }

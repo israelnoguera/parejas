@@ -11,9 +11,8 @@
 
 namespace Symfony\Bridge\Doctrine\Form\Type;
 
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Symfony\Component\Form\FormBuilder;
-use Symfony\Component\Form\FormFactoryInterface;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Bridge\Doctrine\Form\ChoiceList\EntityChoiceList;
 use Symfony\Bridge\Doctrine\Form\EventListener\MergeCollectionListener;
 use Symfony\Bridge\Doctrine\Form\DataTransformer\EntitiesToArrayTransformer;
@@ -24,7 +23,7 @@ class EntityType extends AbstractType
 {
     protected $registry;
 
-    public function __construct(RegistryInterface $registry)
+    public function __construct(ManagerRegistry $registry)
     {
         $this->registry = $registry;
     }
@@ -48,18 +47,20 @@ class EntityType extends AbstractType
             'class'             => null,
             'property'          => null,
             'query_builder'     => null,
-            'choices'           => array(),
+            'choices'           => null,
+            'group_by'          => null,
         );
 
         $options = array_replace($defaultOptions, $options);
 
         if (!isset($options['choice_list'])) {
             $defaultOptions['choice_list'] = new EntityChoiceList(
-                $this->registry->getEntityManager($options['em']),
+                $this->registry->getManager($options['em']),
                 $options['class'],
                 $options['property'],
                 $options['query_builder'],
-                $options['choices']
+                $options['choices'],
+                $options['group_by']
             );
         }
 

@@ -2,10 +2,11 @@
 
 namespace Symfony\Component\Serializer;
 
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\Encoder\EncoderInterface;
 use Symfony\Component\Serializer\Encoder\DecoderInterface;
 use Symfony\Component\Serializer\Encoder\NormalizationAwareInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Exception\RuntimeException;
 use Symfony\Component\Serializer\Exception\LogicException;
 use Symfony\Component\Serializer\Exception\UnexpectedValueException;
@@ -33,12 +34,14 @@ use Symfony\Component\Serializer\Exception\UnexpectedValueException;
  * @author Johannes M. Schmitt <schmittjoh@gmail.com>
  * @author Lukas Kahwe Smith <smith@pooteeweet.org>
  */
-class Serializer implements SerializerInterface
+class Serializer implements SerializerInterface, NormalizerInterface, DenormalizerInterface, EncoderInterface, DecoderInterface
 {
     protected $normalizers = array();
     protected $encoders = array();
     protected $normalizerCache = array();
     protected $denormalizerCache = array();
+    protected $encoderByFormat = array();
+    protected $decoderByFormat = array();
 
     public function __construct(array $normalizers = array(), array $encoders = array())
     {
@@ -62,7 +65,7 @@ class Serializer implements SerializerInterface
      */
     public final function serialize($data, $format)
     {
-        if (!$this->supportsSerialization($format)) {
+        if (!$this->supportsEncoding($format)) {
             throw new UnexpectedValueException('Serialization for the format '.$format.' is not supported');
         }
 
@@ -80,7 +83,7 @@ class Serializer implements SerializerInterface
      */
     public final function deserialize($data, $type, $format)
     {
-        if (!$this->supportsDeserialization($format)) {
+        if (!$this->supportsDecoding($format)) {
             throw new UnexpectedValueException('Deserialization for the format '.$format.' is not supported');
         }
 
@@ -96,6 +99,9 @@ class Serializer implements SerializerInterface
     {
         if (null === $data || is_scalar($data)) {
             return $data;
+        }
+        if (is_object($data) && $this->supportsNormalization($data, $format)) {
+            return $this->normalizeObject($data, $format);
         }
         if ($data instanceof \Traversable) {
             $normalized = array();
@@ -129,6 +135,66 @@ class Serializer implements SerializerInterface
     /**
      * {@inheritdoc}
      */
+    public function supportsNormalization($data, $format = null)
+    {
+        try {
+            $this->getNormalizer($data, $format);
+        } catch (RuntimeException $e) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function supportsDenormalization($data, $type, $format = null)
+    {
+        try {
+            $this->getDenormalizer($data, $type, $format = null);
+        } catch (RuntimeException $e) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    private function getNormalizer($data, $format = null)
+    {
+        foreach ($this->normalizers as $normalizer) {
+            if ($normalizer instanceof NormalizerInterface
+                && $normalizer->supportsNormalization($data, $format)
+            ) {
+                return $normalizer;
+            }
+        }
+
+        throw new RuntimeException(sprintf('No normalizer found for format "%s".', $format));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    private function getDenormalizer($data, $type, $format = null)
+    {
+        foreach ($this->normalizers as $normalizer) {
+            if ($normalizer instanceof DenormalizerInterface
+                && $normalizer->supportsDenormalization($data, $type, $format)
+            ) {
+                return $normalizer;
+            }
+        }
+
+        throw new RuntimeException(sprintf('No denormalizer found for format "%s".', $format));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public final function encode($data, $format)
     {
         return $this->getEncoder($format)->encode($data, $format);
@@ -154,17 +220,20 @@ class Serializer implements SerializerInterface
         if (!$this->normalizers) {
             throw new LogicException('You must register at least one normalizer to be able to normalize objects.');
         }
+
         $class = get_class($object);
         if (isset($this->normalizerCache[$class][$format])) {
             return $this->normalizerCache[$class][$format]->normalize($object, $format);
         }
+
         foreach ($this->normalizers as $normalizer) {
-            if ($normalizer->supportsNormalization($object, $class, $format)) {
+            if ($normalizer->supportsNormalization($object, $format)) {
                 $this->normalizerCache[$class][$format] = $normalizer;
 
                 return $normalizer->normalize($object, $format);
             }
         }
+
         throw new UnexpectedValueException('Could not normalize object of type '.$class.', no supporting normalizer found.');
     }
 
@@ -181,9 +250,11 @@ class Serializer implements SerializerInterface
         if (!$this->normalizers) {
             throw new LogicException('You must register at least one normalizer to be able to denormalize objects.');
         }
+
         if (isset($this->denormalizerCache[$class][$format])) {
             return $this->denormalizerCache[$class][$format]->denormalize($data, $class, $format);
         }
+
         foreach ($this->normalizers as $normalizer) {
             if ($normalizer->supportsDenormalization($data, $class, $format)) {
                 $this->denormalizerCache[$class][$format] = $normalizer;
@@ -191,23 +262,8 @@ class Serializer implements SerializerInterface
                 return $normalizer->denormalize($data, $class, $format);
             }
         }
+
         throw new UnexpectedValueException('Could not denormalize object of type '.$class.', no supporting normalizer found.');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function supportsSerialization($format)
-    {
-        return $this->supportsEncoding($format);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function supportsDeserialization($format)
-    {
-        return $this->supportsDecoding($format);
     }
 
     /**
@@ -216,12 +272,12 @@ class Serializer implements SerializerInterface
     public function supportsEncoding($format)
     {
         try {
-            $encoder = $this->getEncoder($format);
-        } catch (\RuntimeException $e) {
+            $this->getEncoder($format);
+        } catch (RuntimeException $e) {
             return false;
         }
 
-        return $encoder instanceof EncoderInterface;
+        return true;
     }
 
     /**
@@ -230,23 +286,59 @@ class Serializer implements SerializerInterface
     public function supportsDecoding($format)
     {
         try {
-            $encoder = $this->getEncoder($format);
-        } catch (\RuntimeException $e) {
+            $this->getDecoder($format);
+        } catch (RuntimeException $e) {
             return false;
         }
 
-        return $encoder instanceof DecoderInterface;
+        return true;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getEncoder($format)
+    private function getEncoder($format)
     {
-        if (!isset($this->encoders[$format])) {
-            throw new RuntimeException(sprintf('No encoder found for format "%s".', $format));
+        if (isset($this->encoderByFormat[$format])
+            && isset($this->encoders[$this->encoderByFormat[$format]])
+        ) {
+            return $this->encoders[$this->encoderByFormat[$format]];
         }
 
-        return $this->encoders[$format];
+        foreach ($this->encoders as $i => $encoder) {
+            if ($encoder instanceof EncoderInterface
+                && $encoder->supportsEncoding($format)
+            ) {
+                $this->encoderByFormat[$format] = $i;
+
+                return $encoder;
+            }
+        }
+
+        throw new RuntimeException(sprintf('No encoder found for format "%s".', $format));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    private function getDecoder($format)
+    {
+        if (isset($this->decoderByFormat[$format])
+            && isset($this->encoders[$this->decoderByFormat[$format]])
+        ) {
+            return $this->encoders[$this->decoderByFormat[$format]];
+        }
+
+        foreach ($this->encoders as $i => $encoder) {
+            if ($encoder instanceof DecoderInterface
+                && $encoder->supportsDecoding($format)
+            ) {
+                $this->decoderByFormat[$format] = $i;
+
+                return $encoder;
+            }
+        }
+
+        throw new RuntimeException(sprintf('No decoder found for format "%s".', $format));
     }
 }

@@ -13,9 +13,7 @@ namespace Symfony\Bundle\FrameworkBundle\DependencyInjection;
 
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\DefinitionDecorator;
-use Symfony\Component\DependencyInjection\Parameter;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\Config\Resource\FileResource;
@@ -53,9 +51,12 @@ class FrameworkExtension extends Extension
             $loader->load('debug.xml');
             $container->setDefinition('event_dispatcher', $container->findDefinition('debug.event_dispatcher'));
             $container->setAlias('debug.event_dispatcher', 'event_dispatcher');
+
+            $container->setDefinition('controller_resolver', $container->findDefinition('debug.controller_resolver'));
+            $container->setAlias('debug.controller_resolver', 'controller_resolver');
         }
 
-        $configuration = new Configuration($container->getParameter('kernel.debug'));
+        $configuration = $this->getConfiguration($configs, $container);
         $config = $this->processConfiguration($configuration, $configs);
 
         if (isset($config['charset'])) {
@@ -64,6 +65,8 @@ class FrameworkExtension extends Extension
         $container->setParameter('kernel.secret', $config['secret']);
 
         $container->setParameter('kernel.trust_proxy_headers', $config['trust_proxy_headers']);
+
+        $container->setParameter('kernel.default_locale', $config['default_locale']);
 
         if (!empty($config['test'])) {
             $loader->load('test.xml');
@@ -122,6 +125,7 @@ class FrameworkExtension extends Extension
 
             'Symfony\\Component\\HttpKernel\\HttpKernel',
             'Symfony\\Component\\HttpKernel\\EventListener\\ResponseListener',
+            'Symfony\\Component\\HttpKernel\\EventListener\\RouterListener',
             'Symfony\\Component\\HttpKernel\\Controller\\ControllerResolver',
             'Symfony\\Component\\HttpKernel\\Controller\\ControllerResolverInterface',
             'Symfony\\Component\\HttpKernel\\Event\\KernelEvent',
@@ -133,7 +137,6 @@ class FrameworkExtension extends Extension
             'Symfony\\Component\\HttpKernel\\KernelEvents',
             'Symfony\\Component\\HttpKernel\\Config\\FileLocator',
 
-            'Symfony\\Bundle\\FrameworkBundle\\EventListener\\RouterListener',
             'Symfony\\Bundle\\FrameworkBundle\\Controller\\ControllerNameParser',
             'Symfony\\Bundle\\FrameworkBundle\\Controller\\ControllerResolver',
             // Cannot be included because annotations will parse the big compiled class file
@@ -141,6 +144,11 @@ class FrameworkExtension extends Extension
             'Symfony\\Bundle\\FrameworkBundle\\ContainerAwareEventDispatcher',
             'Symfony\\Bundle\\FrameworkBundle\\HttpKernel',
         ));
+    }
+
+    public function getConfiguration(array $config, ContainerBuilder $container)
+    {
+        return new Configuration($container->getParameter('kernel.debug'));
     }
 
     /**
@@ -194,10 +202,12 @@ class FrameworkExtension extends Extension
 
         // Choose storage class based on the DSN
         $supported = array(
-            'sqlite' => 'Symfony\Component\HttpKernel\Profiler\SqliteProfilerStorage',
-            'mysql'  => 'Symfony\Component\HttpKernel\Profiler\MysqlProfilerStorage',
+            'sqlite'  => 'Symfony\Component\HttpKernel\Profiler\SqliteProfilerStorage',
+            'mysql'   => 'Symfony\Component\HttpKernel\Profiler\MysqlProfilerStorage',
+            'file'    => 'Symfony\Component\HttpKernel\Profiler\FileProfilerStorage',
+            'mongodb' => 'Symfony\Component\HttpKernel\Profiler\MongoDbProfilerStorage',
         );
-        list($class, ) = explode(':', $config['dsn']);
+        list($class, ) = explode(':', $config['dsn'], 2);
         if (!isset($supported[$class])) {
             throw new \LogicException(sprintf('Driver "%s" is not supported for the profiler.', $class));
         }
@@ -278,7 +288,6 @@ class FrameworkExtension extends Extension
 
         // session
         $container->getDefinition('session_listener')->addArgument($config['auto_start']);
-        $container->setParameter('session.default_locale', $config['default_locale']);
 
         // session storage
         $container->setAlias('session.storage', $config['storage_id']);
@@ -515,7 +524,7 @@ class FrameworkExtension extends Extension
                 })->in($dirs);
                 foreach ($finder as $file) {
                     // filename is domain.locale.format
-                    list($domain, $locale, $format) = explode('.', $file->getBasename());
+                    list($domain, $locale, $format) = explode('.', $file->getBasename(), 3);
 
                     $translator->addMethodCall('addResource', array($format, (string) $file, $locale, $domain));
                 }
@@ -561,7 +570,7 @@ class FrameworkExtension extends Extension
 
         foreach ($container->getParameter('kernel.bundles') as $bundle) {
             $reflection = new \ReflectionClass($bundle);
-            if (file_exists($file = dirname($reflection->getFilename()).'/Resources/config/validation.xml')) {
+            if (is_file($file = dirname($reflection->getFilename()).'/Resources/config/validation.xml')) {
                 $files[] = realpath($file);
                 $container->addResource(new FileResource($file));
             }
@@ -576,7 +585,7 @@ class FrameworkExtension extends Extension
 
         foreach ($container->getParameter('kernel.bundles') as $bundle) {
             $reflection = new \ReflectionClass($bundle);
-            if (file_exists($file = dirname($reflection->getFilename()).'/Resources/config/validation.yml')) {
+            if (is_file($file = dirname($reflection->getFilename()).'/Resources/config/validation.yml')) {
                 $files[] = realpath($file);
                 $container->addResource(new FileResource($file));
             }

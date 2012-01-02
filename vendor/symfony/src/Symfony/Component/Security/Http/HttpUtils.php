@@ -16,6 +16,8 @@ use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Routing\Exception\MethodNotAllowedException;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 /**
  * Encapsulates the logic needed to create sub-requests, redirect the user, and match URLs.
@@ -50,7 +52,6 @@ class HttpUtils
         if ('/' === $path[0]) {
             $path = $request->getUriForPath($path);
         } elseif (0 !== strpos($path, 'http')) {
-            $this->resetLocale($request);
             $path = $this->generateUrl($path, true);
         }
 
@@ -68,7 +69,6 @@ class HttpUtils
     public function createRequest(Request $request, $path)
     {
         if ($path && '/' !== $path[0] && 0 !== strpos($path, 'http')) {
-            $this->resetLocale($request);
             $path = $this->generateUrl($path, true);
         }
         if (0 !== strpos($path, 'http')) {
@@ -97,7 +97,7 @@ class HttpUtils
      * Checks that a given path matches the Request.
      *
      * @param Request $request A Request instance
-     * @param string  $path    A path (an absolute path (/foo), an absolute URL (http://...), or a route name (foo))
+     * @param string  $path    A path (an absolute path (/foo) or a route name (foo))
      *
      * @return Boolean true if the path is the same as the one from the Request, false otherwise
      */
@@ -108,33 +108,14 @@ class HttpUtils
                 $parameters = $this->router->match($request->getPathInfo());
 
                 return $path === $parameters['_route'];
-            } catch (\Exception $e) {
+            } catch (MethodNotAllowedException $e) {
+                return false;
+            } catch (ResourceNotFoundException $e) {
                 return false;
             }
         }
 
         return $path === $request->getPathInfo();
-    }
-
-    // hack (don't have a better solution for now)
-    private function resetLocale(Request $request)
-    {
-        $context = $this->router->getContext();
-        if ($context->getParameter('_locale')) {
-            return;
-        }
-
-        try {
-            $parameters = $this->router->match($request->getPathInfo());
-
-            if (isset($parameters['_locale'])) {
-                $context->setParameter('_locale', $parameters['_locale']);
-            } elseif ($session = $request->getSession()) {
-                $context->setParameter('_locale', $session->getLocale());
-            }
-        } catch (\Exception $e) {
-            // let's hope user doesn't use the locale in the path
-        }
     }
 
     private function generateUrl($route, $absolute = false)

@@ -64,7 +64,7 @@ class FileValidator extends ConstraintValidator
 
         $path = $value instanceof FileObject ? $value->getPathname() : (string) $value;
 
-        if (!file_exists($path)) {
+        if (!is_file($path)) {
             $this->setMessage($constraint->notFoundMessage, array('{{ file }}' => $path));
 
             return false;
@@ -81,11 +81,11 @@ class FileValidator extends ConstraintValidator
                 $size = filesize($path);
                 $limit = $constraint->maxSize;
                 $suffix = ' bytes';
-            } else if (preg_match('/^(\d+)k$/', $constraint->maxSize, $matches)) {
+            } elseif (preg_match('/^(\d+)k$/', $constraint->maxSize, $matches)) {
                 $size = round(filesize($path) / 1000, 2);
                 $limit = $matches[1];
                 $suffix = ' kB';
-            } else if (preg_match('/^(\d+)M$/', $constraint->maxSize, $matches)) {
+            } elseif (preg_match('/^(\d+)M$/', $constraint->maxSize, $matches)) {
                 $size = round(filesize($path) / 1000000, 2);
                 $limit = $matches[1];
                 $suffix = ' MB';
@@ -109,10 +109,28 @@ class FileValidator extends ConstraintValidator
                 $value = new FileObject($value);
             }
 
-            if (!in_array($value->getMimeType(), (array) $constraint->mimeTypes)) {
+            $mimeTypes = (array) $constraint->mimeTypes;
+            $mime = $value->getMimeType();
+            $valid = false;
+
+            foreach ($mimeTypes as $mimeType) {
+                if ($mimeType === $mime) {
+                    $valid = true;
+                    break;
+                }
+
+                if ($discrete = strstr($mimeType, '/*', true)) {
+                    if (strstr($mime, '/', true) === $discrete) {
+                        $valid = true;
+                        break;
+                    }
+                }
+            }
+
+            if (false === $valid) {
                 $this->setMessage($constraint->mimeTypesMessage, array(
-                    '{{ type }}'    => '"'.$value->getMimeType().'"',
-                    '{{ types }}'   => '"'.implode('", "', (array) $constraint->mimeTypes).'"',
+                    '{{ type }}'    => '"'.$mime.'"',
+                    '{{ types }}'   => '"'.implode('", "', $mimeTypes) .'"',
                     '{{ file }}'    => $path,
                 ));
 

@@ -33,7 +33,7 @@ class Filesystem
     {
         $this->mkdir(dirname($targetFile));
 
-        if (!$override && file_exists($targetFile)) {
+        if (!$override && is_file($targetFile)) {
             $doCopy = filemtime($originFile) > filemtime($targetFile);
         } else {
             $doCopy = true;
@@ -133,7 +133,7 @@ class Filesystem
     {
         // we check that target does not exist
         if (is_readable($target)) {
-            throw new \RuntimeException(sprintf('Cannot rename because the target "%" already exist.', $target));
+            throw new \RuntimeException(sprintf('Cannot rename because the target "%s" already exist.', $target));
         }
 
         rename($origin, $target);
@@ -166,6 +166,32 @@ class Filesystem
         if (!$ok) {
             symlink($originDir, $targetDir);
         }
+    }
+
+    /**
+     * Given an existing path, convert it to a path relative to a given starting path
+     *
+     * @var string Absolute path of target
+     * @var string Absolute path where traversal begins
+     *
+     * @return string Path of target relative to starting path
+     */
+    public function makePathRelative($endPath, $startPath)
+    {
+        // Find for which character the the common path stops
+        $offset = 0;
+        while ($startPath[$offset] === $endPath[$offset]) {
+            $offset++;
+        }
+
+        // Determine how deep the start path is relative to the common path (ie, "web/bundles" = 2 levels)
+        $depth = substr_count(substr($startPath, $offset), DIRECTORY_SEPARATOR) + 1;
+
+        // Repeated "../" for each level need to reach the common path
+        $traverser = str_repeat('../', $depth);
+
+        // Construct $endPath from traversing to the common path, then to the remaining $endPath
+        return $traverser.substr($endPath, $offset);
     }
 
     /**
@@ -204,12 +230,12 @@ class Filesystem
         foreach ($iterator as $file) {
             $target = $targetDir.'/'.str_replace($originDir.DIRECTORY_SEPARATOR, '', $file->getPathname());
 
-            if (is_dir($file)) {
-                $this->mkdir($target);
-            } else if (is_file($file) || ($copyOnWindows && is_link($file))) {
-                $this->copy($file, $target, isset($options['override']) ? $options['override'] : false);
-            } else if (is_link($file)) {
+            if (is_link($file)) {
                 $this->symlink($file, $target);
+            } elseif (is_dir($file)) {
+                $this->mkdir($target);
+            } elseif (is_file($file) || ($copyOnWindows && is_link($file))) {
+                $this->copy($file, $target, isset($options['override']) ? $options['override'] : false);
             } else {
                 throw new \RuntimeException(sprintf('Unable to guess "%s" file type.', $file));
             }
@@ -230,6 +256,7 @@ class Filesystem
                 && $file[1] == ':'
                 && ($file[2] == '\\' || $file[2] == '/')
             )
+            || null !== parse_url($file, PHP_URL_SCHEME)
         ) {
             return true;
         }

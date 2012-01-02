@@ -16,7 +16,6 @@ use Symfony\Bundle\DoctrineBundle\DependencyInjection\DoctrineExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
-use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\DependencyInjection\Compiler\ResolveDefinitionTemplatesPass;
 use Symfony\Component\Config\FileLocator;
@@ -121,8 +120,8 @@ abstract class AbstractDoctrineExtensionTest extends TestCase
         $this->assertEquals('Doctrine\Common\Cache\XcacheCache', $container->getParameter('doctrine.orm.cache.xcache.class'));
         $this->assertEquals('Doctrine\ORM\Mapping\Driver\DriverChain', $container->getParameter('doctrine.orm.metadata.driver_chain.class'));
         $this->assertEquals('Doctrine\ORM\Mapping\Driver\AnnotationDriver', $container->getParameter('doctrine.orm.metadata.annotation.class'));
-        $this->assertEquals('Symfony\Bridge\Doctrine\Mapping\Driver\XmlDriver', $container->getParameter('doctrine.orm.metadata.xml.class'));
-        $this->assertEquals('Symfony\Bridge\Doctrine\Mapping\Driver\YamlDriver', $container->getParameter('doctrine.orm.metadata.yml.class'));
+        $this->assertEquals('Doctrine\ORM\Mapping\Driver\SimplifiedXmlDriver', $container->getParameter('doctrine.orm.metadata.xml.class'));
+        $this->assertEquals('Doctrine\ORM\Mapping\Driver\SimplifiedYamlDriver', $container->getParameter('doctrine.orm.metadata.yml.class'));
 
         $config = array(
             'proxy_namespace' => 'MyProxies',
@@ -219,7 +218,6 @@ abstract class AbstractDoctrineExtensionTest extends TestCase
                 'user' => 'root',
                 'password' => null,
                 'driver' => 'pdo_mysql',
-                'logging' => false,
                 'driverOptions' => array(),
             ),
             new Reference('doctrine.dbal.default_connection.configuration'),
@@ -259,7 +257,6 @@ abstract class AbstractDoctrineExtensionTest extends TestCase
                 'password' => 'sqlite_s3cr3t',
                 'dbname' => 'sqlite_db',
                 'memory' => true,
-                'logging' => false,
             ),
             new Reference('doctrine.dbal.default_connection.configuration'),
             new Reference('doctrine.dbal.default_connection.event_manager'),
@@ -336,6 +333,26 @@ abstract class AbstractDoctrineExtensionTest extends TestCase
 
         $definition = $container->getDefinition('doctrine.orm.em1_result_cache');
         $this->assertEquals('%doctrine.orm.cache.array.class%', $definition->getClass());
+    }
+
+    public function testLoadLogging()
+    {
+        $container = $this->getContainer();
+        $loader = new DoctrineExtension();
+        $container->registerExtension($loader);
+
+        $this->loadFromFile($container, 'dbal_logging');
+
+        $this->compileContainer($container);
+
+        $definition = $container->getDefinition('doctrine.dbal.log_connection.configuration');
+        $this->assertDICDefinitionMethodCallOnce($definition, 'setSQLLogger', array(new Reference('doctrine.dbal.logger')));
+
+        $definition = $container->getDefinition('doctrine.dbal.profile_connection.configuration');
+        $this->assertDICDefinitionMethodCallOnce($definition, 'setSQLLogger', array(new Reference('doctrine.dbal.logger.profiling')));
+
+        $definition = $container->getDefinition('doctrine.dbal.both_connection.configuration');
+        $this->assertDICDefinitionMethodCallOnce($definition, 'setSQLLogger', array(new Reference('doctrine.dbal.logger.chain')));
     }
 
     public function testBundleEntityAliases()
@@ -513,7 +530,7 @@ abstract class AbstractDoctrineExtensionTest extends TestCase
         $this->assertEquals('%doctrine.orm.cache.apc.class%', $cacheDefinition->getClass());
 
         $configDefinition = $container->getDefinition('doctrine.orm.default_configuration');
-        $this->assertDICDefinitionMethodCallOnce($configDefinition, 'setAutoGenerateProxyClasses', array(true));
+        $this->assertDICDefinitionMethodCallOnce($configDefinition, 'setAutoGenerateProxyClasses', array('%doctrine.orm.auto_generate_proxy_classes%'));
     }
 
     public function testSingleEntityManagerMultipleMappingBundleDefinitions()
@@ -552,12 +569,12 @@ abstract class AbstractDoctrineExtensionTest extends TestCase
 
         $ymlDef = $container->getDefinition('doctrine.orm.default_yml_metadata_driver');
         $this->assertDICConstructorArguments($ymlDef, array(
-            array(__DIR__ .DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'Bundles'.DIRECTORY_SEPARATOR.'YamlBundle'.DIRECTORY_SEPARATOR.'Resources'.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'doctrine')
+            array(__DIR__ .DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'Bundles'.DIRECTORY_SEPARATOR.'YamlBundle'.DIRECTORY_SEPARATOR.'Resources'.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'doctrine' => 'Fixtures\Bundles\YamlBundle\Entity')
         ));
 
         $xmlDef = $container->getDefinition('doctrine.orm.default_xml_metadata_driver');
         $this->assertDICConstructorArguments($xmlDef, array(
-            array(__DIR__ .DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'Bundles'.DIRECTORY_SEPARATOR.'XmlBundle'.DIRECTORY_SEPARATOR.'Resources'.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'doctrine')
+            array(__DIR__ .DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'Bundles'.DIRECTORY_SEPARATOR.'XmlBundle'.DIRECTORY_SEPARATOR.'Resources'.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'doctrine' => 'Fixtures\Bundles\XmlBundle')
         ));
     }
 
@@ -601,12 +618,12 @@ abstract class AbstractDoctrineExtensionTest extends TestCase
 
         $ymlDef = $container->getDefinition('doctrine.orm.em2_yml_metadata_driver');
         $this->assertDICConstructorArguments($ymlDef, array(
-            array(__DIR__ .DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'Bundles'.DIRECTORY_SEPARATOR.'YamlBundle'.DIRECTORY_SEPARATOR.'Resources'.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'doctrine')
+            array(__DIR__ .DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'Bundles'.DIRECTORY_SEPARATOR.'YamlBundle'.DIRECTORY_SEPARATOR.'Resources'.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'doctrine' => 'Fixtures\Bundles\YamlBundle\Entity')
         ));
 
         $xmlDef = $container->getDefinition('doctrine.orm.em2_xml_metadata_driver');
         $this->assertDICConstructorArguments($xmlDef, array(
-            array(__DIR__ .DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'Bundles'.DIRECTORY_SEPARATOR.'XmlBundle'.DIRECTORY_SEPARATOR.'Resources'.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'doctrine')
+            array(__DIR__ .DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'Bundles'.DIRECTORY_SEPARATOR.'XmlBundle'.DIRECTORY_SEPARATOR.'Resources'.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'doctrine' => 'Fixtures\Bundles\XmlBundle')
         ));
     }
 
@@ -735,7 +752,6 @@ abstract class AbstractDoctrineExtensionTest extends TestCase
      * @param \Symfony\Component\DependencyInjection\Definition $definition
      * @param string $methodName
      * @param array $params
-     * @return void
      */
     protected function assertDICDefinitionMethodCallOnce($definition, $methodName, array $params = null)
     {

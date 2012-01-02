@@ -16,6 +16,7 @@
 namespace Symfony\Component\HttpKernel\HttpCache;
 
 use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\HttpKernel\TerminableInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -26,7 +27,7 @@ use Symfony\Component\HttpFoundation\Response;
  *
  * @api
  */
-class HttpCache implements HttpKernelInterface
+class HttpCache implements HttpKernelInterface, TerminableInterface
 {
     private $kernel;
     private $store;
@@ -94,6 +95,16 @@ class HttpCache implements HttpKernelInterface
         ), $options);
         $this->esi = $esi;
         $this->traces = array();
+    }
+
+    /**
+     * Gets the current store.
+     *
+     * @return StoreInterface $store A StoreInterface instance
+     */
+    public function getStore()
+    {
+        return $this->store;
     }
 
     /**
@@ -200,9 +211,21 @@ class HttpCache implements HttpKernelInterface
             }
         }
 
-        $response->prepare();
+        $response->prepare($request);
 
         return $response;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @api
+     */
+    public function terminate(Request $request, Response $response)
+    {
+        if ($this->getKernel() instanceof TerminableInterface) {
+            $this->getKernel()->terminate($request, $response);
+        }
     }
 
     /**
@@ -492,7 +515,7 @@ class HttpCache implements HttpKernelInterface
 
             // wait for the lock to be released
             $wait = 0;
-            while (file_exists($lock) && $wait < 5000000) {
+            while (is_file($lock) && $wait < 5000000) {
                 usleep($wait += 50000);
             }
 
@@ -575,6 +598,9 @@ class HttpCache implements HttpKernelInterface
 
             $response->setContent(ob_get_clean());
             $response->headers->remove('X-Body-Eval');
+            if (!$response->headers->has('Transfer-Encoding')) {
+                $response->headers->set('Content-Length', strlen($response->getContent()));
+            }
         } elseif ($response->headers->has('X-Body-File')) {
             $response->setContent(file_get_contents($response->headers->get('X-Body-File')));
         } else {

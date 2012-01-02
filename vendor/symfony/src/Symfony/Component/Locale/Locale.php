@@ -35,7 +35,9 @@ class Locale extends \Locale
      * Returns the country names for a locale
      *
      * @param  string $locale     The locale to use for the country names
+     *
      * @return array              The country names with their codes as keys
+     *
      * @throws RuntimeException   When the resource bundles cannot be loaded
      */
     static public function getDisplayCountries($locale)
@@ -82,7 +84,9 @@ class Locale extends \Locale
      * Returns the language names for a locale
      *
      * @param  string $locale     The locale to use for the language names
+     *
      * @return array              The language names with their codes as keys
+     *
      * @throws RuntimeException   When the resource bundles cannot be loaded
      */
     static public function getDisplayLanguages($locale)
@@ -163,5 +167,55 @@ class Locale extends \Locale
     static public function getLocales()
     {
         return array_keys(self::getDisplayLocales(self::getDefault()));
+    }
+
+    /**
+     * Returns the ICU version
+     *
+     * @return string|null The ICU version
+     */
+    static public function getIcuVersion()
+    {
+        if (defined('INTL_ICU_VERSION')) {
+            return INTL_ICU_VERSION;
+        }
+
+        try {
+            $reflector = new \ReflectionExtension('intl');
+        } catch (\ReflectionException $e) {
+            return;
+        }
+
+        ob_start();
+        $reflector->info();
+        $output = strip_tags(ob_get_clean());
+        preg_match('/^ICU version (?:=>)?(.*)$/m', $output, $matches);
+
+        return trim($matches[1]);
+    }
+
+    /**
+     * Returns the ICU Data version
+     *
+     * @return string|null The ICU Data version
+     */
+    static public function getIcuDataVersion()
+    {
+        if (defined('INTL_ICU_DATA_VERSION')) {
+            return INTL_ICU_DATA_VERSION;
+        }
+
+        try {
+            $reflector = new \ReflectionExtension('intl');
+        } catch (\ReflectionException $e) {
+            return;
+        }
+
+        ob_start();
+        $reflector->info();
+        $output = strip_tags(ob_get_clean());
+        preg_match('/^ICU Data version (?:=>)?(.*)$/m', $output, $matches);
+
+        return trim($matches[1]);
     }
 }

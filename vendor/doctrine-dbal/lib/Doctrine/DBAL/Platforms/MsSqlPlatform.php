@@ -37,6 +37,33 @@ use Doctrine\DBAL\Schema\Index,
  */
 class MsSqlPlatform extends AbstractPlatform
 {
+    /**
+     * {@inheritDoc}
+     */
+    public function getDateDiffExpression($date1, $date2)
+    {
+        return 'DATEDIFF(day, ' . $date2 . ',' . $date1 . ')';
+    }
+
+    public function getDateAddDaysExpression($date, $days)
+    {
+        return 'DATEADD(day, ' . $days . ', ' . $date . ')';
+    }
+
+    public function getDateSubDaysExpression($date, $days)
+    {
+        return 'DATEADD(day, -1 * ' . $days . ', ' . $date . ')';
+    }
+
+    public function getDateAddMonthExpression($date, $months)
+    {
+        return 'DATEADD(month, ' . $months . ', ' . $date . ')';
+    }
+
+    public function getDateSubMonthExpression($date, $months)
+    {
+        return 'DATEADD(month, -1 * ' . $months . ', ' . $date . ')';
+    }
 
     /**
      * Whether the platform prefers identity columns for ID generation.
@@ -250,6 +277,8 @@ class MsSqlPlatform extends AbstractPlatform
     public function getAlterTableSQL(TableDiff $diff)
     {
         $queryParts = array();
+        $sql = array();
+
         if ($diff->newName !== false) {
             $queryParts[] = 'RENAME TO ' . $diff->newName;
         }
@@ -265,16 +294,15 @@ class MsSqlPlatform extends AbstractPlatform
         foreach ($diff->changedColumns AS $columnDiff) {
             /* @var $columnDiff Doctrine\DBAL\Schema\ColumnDiff */
             $column = $columnDiff->column;
-            $queryParts[] = 'CHANGE ' . ($columnDiff->oldColumnName) . ' '
-                    . $this->getColumnDeclarationSQL($column->getQuotedName($this), $column->toArray());
+            $queryParts[] = 'ALTER COLUMN ' .
+                    $this->getColumnDeclarationSQL($column->getQuotedName($this), $column->toArray());
         }
 
         foreach ($diff->renamedColumns AS $oldColumnName => $column) {
-            $queryParts[] = 'CHANGE ' . $oldColumnName . ' '
-                    . $this->getColumnDeclarationSQL($column->getQuotedName($this), $column->toArray());
+            $sql[] = "sp_RENAME '". $diff->name. ".". $oldColumnName . "' , '".$column->getQuotedName($this)."', 'COLUMN'";
+            $queryParts[] = 'ALTER COLUMN ' .
+                    $this->getColumnDeclarationSQL($column->getQuotedName($this), $column->toArray());
         }
-
-        $sql = array();
 
         foreach ($queryParts as $query) {
             $sql[] = 'ALTER TABLE ' . $diff->name . ' ' . $query;
@@ -315,7 +343,7 @@ class MsSqlPlatform extends AbstractPlatform
      */
     public function getListTableColumnsSQL($table, $database = null)
     {
-        return 'exec sp_columns @table_name = ' . $table;
+        return "exec sp_columns @table_name = '" . $table . "'";
     }
 
     /**
@@ -793,5 +821,18 @@ class MsSqlPlatform extends AbstractPlatform
     public function quoteIdentifier($str)
     {
         return "[" . str_replace("]", "][", $str) . "]";
+    }
+
+    public function getTruncateTableSQL($tableName, $cascade = false)
+    {
+        return 'TRUNCATE TABLE '.$tableName;
+    }
+
+    /**
+     * Gets the SQL Snippet used to declare a BLOB column type.
+     */
+    public function getBlobTypeDeclarationSQL(array $field)
+    {
+        return 'VARBINARY(MAX)';
     }
 }

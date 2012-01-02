@@ -5,7 +5,6 @@ namespace NV\ParejasBundle\Entity;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-use NV\ParejasBundle\Entity\Usuarios;
 
 /**
  * NV\ParejasBundle\Entity\Perfiles
@@ -47,18 +46,21 @@ class Perfiles
     /**
      * @ORM\ManyToOne(targetEntity="Paises")
      * @ORM\JoinColumn(name="pais_id")
+     * @Assert\Type(type="NV\ParejasBundle\Entity\Paises")
      */
     protected $pais_id;
 
     /**
      * @ORM\ManyToOne(targetEntity="Provincias")
      * @ORM\JoinColumn(name="provincia_id")
+     * @Assert\Type(type="NV\ParejasBundle\Entity\Provincias")
      */
     protected $provincia_id;
 
     /**
      * @ORM\ManyToOne(targetEntity="Localidades")
      * @ORM\JoinColumn(name="localidad_id")
+     * @Assert\Type(type="NV\ParejasBundle\Entity\Localidades")
      */
     protected $localidad_id;
 

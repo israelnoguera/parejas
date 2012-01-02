@@ -117,6 +117,19 @@ class Command
     }
 
     /**
+     * Checks whether the command is enabled or not in the current environment
+     *
+     * Override this to check for x or y and return false if the command can not
+     * run properly under the current conditions.
+     *
+     * @return Boolean
+     */
+    public function isEnabled()
+    {
+        return true;
+    }
+
+    /**
      * Configures the current command.
      */
     protected function configure()
@@ -244,10 +257,9 @@ class Command
             return;
         }
 
-        $this->definition->setArguments(array_merge(
-            $this->application->getDefinition()->getArguments(),
-            $this->definition->getArguments()
-        ));
+        $currentArguments = $this->definition->getArguments();
+        $this->definition->setArguments($this->application->getDefinition()->getArguments());
+        $this->definition->addArguments($currentArguments);
 
         $this->definition->addOptions($this->application->getDefinition()->getOptions());
 
@@ -257,7 +269,7 @@ class Command
     /**
      * Sets an array of argument and option instances.
      *
-     * @param array|Definition $definition An array of argument and option instances or a definition instance
+     * @param array|InputDefinition $definition An array of argument and option instances or a definition instance
      *
      * @return Command The current instance
      *

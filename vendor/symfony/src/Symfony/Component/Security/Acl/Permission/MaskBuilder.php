@@ -73,7 +73,6 @@ class MaskBuilder
      * Constructor
      *
      * @param integer $mask optional; defaults to 0
-     * @return void
      */
     public function __construct($mask = 0)
     {
@@ -94,7 +93,7 @@ class MaskBuilder
     {
         if (is_string($mask) && defined($name = 'static::MASK_'.strtoupper($mask))) {
             $mask = constant($name);
-        } else if (!is_int($mask)) {
+        } elseif (!is_int($mask)) {
             throw new \InvalidArgumentException('$mask must be an integer.');
         }
 
@@ -147,7 +146,7 @@ class MaskBuilder
     {
         if (is_string($mask) && defined($name = 'static::MASK_'.strtoupper($mask))) {
             $mask = constant($name);
-        } else if (!is_int($mask)) {
+        } elseif (!is_int($mask)) {
             throw new \InvalidArgumentException('$mask must be an integer.');
         }
 

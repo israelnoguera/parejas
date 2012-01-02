@@ -26,6 +26,7 @@ class MessageCatalogue implements MessageCatalogueInterface
     private $locale;
     private $resources;
     private $fallbackCatalogue;
+    private $parent;
 
     /**
      * Constructor.
@@ -183,11 +184,32 @@ class MessageCatalogue implements MessageCatalogueInterface
      */
     public function addFallbackCatalogue(MessageCatalogueInterface $catalogue)
     {
+        // detect circular references
+        $c = $this;
+        do {
+            if ($c->getLocale() === $catalogue->getLocale()) {
+                throw new \LogicException(sprintf('Circular reference detected when adding a fallback catalogue for locale "%s".', $catalogue->getLocale()));
+            }
+        } while ($c = $c->parent);
+
+        $catalogue->parent = $this;
         $this->fallbackCatalogue = $catalogue;
 
         foreach ($catalogue->getResources() as $resource) {
             $this->addResource($resource);
         }
+    }
+
+    /**
+     * Gets the fallback catalogue.
+     *
+     * @return MessageCatalogueInterface A MessageCatalogueInterface instance
+     *
+     * @api
+     */
+    public function getFallbackCatalogue()
+    {
+        return $this->fallbackCatalogue;
     }
 
     /**

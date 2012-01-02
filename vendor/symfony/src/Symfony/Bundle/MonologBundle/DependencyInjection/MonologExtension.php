@@ -17,7 +17,6 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
-use Symfony\Component\DependencyInjection\Parameter;
 
 /**
  * MonologExtension is an extension for the Monolog library.
@@ -32,12 +31,12 @@ class MonologExtension extends Extension
     /**
      * Loads the Monolog configuration.
      *
-     * @param array            $config    An array of configuration settings
+     * @param array            $configs   An array of configuration settings
      * @param ContainerBuilder $container A ContainerBuilder instance
      */
     public function load(array $configs, ContainerBuilder $container)
     {
-        $configuration = new Configuration();
+        $configuration = $this->getConfiguration($configs, $container);
         $config = $this->processConfiguration($configuration, $configs);
 
         if (isset($config['handlers'])) {

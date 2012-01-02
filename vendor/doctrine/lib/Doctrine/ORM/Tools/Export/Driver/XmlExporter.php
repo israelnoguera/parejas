@@ -139,6 +139,9 @@ class XmlExporter extends AbstractExporter
                 if (isset($field['columnName'])) {
                     $idXml->addAttribute('column', $field['columnName']);
                 }
+                if (isset($field['associationKey']) && $field['associationKey']) {
+                    $idXml->addAttribute('association-key', 'true');
+                }
                 if ($idGeneratorType = $this->_getIdGeneratorTypeString($metadata->generatorType)) {
                     $generatorXml = $idXml->addChild('generator');
                     $generatorXml->addAttribute('strategy', $idGeneratorType);
@@ -215,9 +218,6 @@ class XmlExporter extends AbstractExporter
                     if (isset($joinColumn['onDelete'])) {
                         $joinColumnXml->addAttribute('on-delete', $joinColumn['onDelete']);
                     }
-                    if (isset($joinColumn['onUpdate'])) {
-                        $joinColumnXml->addAttribute('on-update', $joinColumn['onUpdate']);
-                    }
                 }
                 $inverseJoinColumnsXml = $joinTableXml->addChild('inverse-join-columns');
                 foreach ($associationMapping['joinTable']['inverseJoinColumns'] as $inverseJoinColumn) {
@@ -226,9 +226,6 @@ class XmlExporter extends AbstractExporter
                     $inverseJoinColumnXml->addAttribute('referenced-column-name', $inverseJoinColumn['referencedColumnName']);
                     if (isset($inverseJoinColumn['onDelete'])) {
                         $inverseJoinColumnXml->addAttribute('on-delete', $inverseJoinColumn['onDelete']);
-                    }
-                    if (isset($inverseJoinColumn['onUpdate'])) {
-                        $inverseJoinColumnXml->addAttribute('on-update', $inverseJoinColumn['onUpdate']);
                     }
                     if (isset($inverseJoinColumn['columnDefinition'])) {
                         $inverseJoinColumnXml->addAttribute('column-definition', $inverseJoinColumn['columnDefinition']);
@@ -249,9 +246,6 @@ class XmlExporter extends AbstractExporter
                     $joinColumnXml->addAttribute('referenced-column-name', $joinColumn['referencedColumnName']);
                     if (isset($joinColumn['onDelete'])) {
                         $joinColumnXml->addAttribute('on-delete', $joinColumn['onDelete']);
-                    }
-                    if (isset($joinColumn['onUpdate'])) {
-                        $joinColumnXml->addAttribute('on-update', $joinColumn['onUpdate']);
                     }
                     if (isset($joinColumn['columnDefinition'])) {
                         $joinColumnXml->addAttribute('column-definition', $joinColumn['columnDefinition']);
@@ -284,6 +278,9 @@ class XmlExporter extends AbstractExporter
             }
             if ($associationMapping['isCascadeDetach']) {
                 $cascade[] = 'cascade-detach';
+            }
+            if (count($cascade) === 5) {
+                $cascade  = array('cascade-all');
             }
             if ($cascade) {
                 $cascadeXml = $associationMappingXml->addChild('cascade');

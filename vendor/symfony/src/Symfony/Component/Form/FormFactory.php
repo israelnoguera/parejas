@@ -220,9 +220,15 @@ class FormFactory implements FormFactoryInterface
 
         while (null !== $type) {
             if ($type instanceof FormTypeInterface) {
+                if ($type->getName() == $type->getParent($options)) {
+                    throw new FormException(sprintf('The form type name "%s" for class "%s" cannot be the same as the parent type.', $type->getName(), get_class($type)));
+                }
+
                 $this->addType($type);
-            } else {
+            } elseif (is_string($type)) {
                 $type = $this->getType($type);
+            } else {
+                throw new UnexpectedTypeException($type, 'string or Symfony\Component\Form\FormTypeInterface');
             }
 
             $defaultOptions = $type->getDefaultOptions($options);
@@ -249,11 +255,11 @@ class FormFactory implements FormFactoryInterface
         $diff = array_diff($passedOptions, $knownOptions);
 
         if (count($diff) > 1) {
-            throw new CreationException(sprintf('The options "%s" do not exist', implode('", "', $diff)));
+            throw new CreationException(sprintf('The options "%s" do not exist. Known options are: "%s"', implode('", "', $diff), implode('", "', $knownOptions)));
         }
 
         if (count($diff) > 0) {
-            throw new CreationException(sprintf('The option "%s" does not exist', current($diff)));
+            throw new CreationException(sprintf('The option "%s" does not exist. Known options are: "%s"', current($diff), implode('", "', $knownOptions)));
         }
 
         foreach ($optionValues as $option => $allowedValues) {

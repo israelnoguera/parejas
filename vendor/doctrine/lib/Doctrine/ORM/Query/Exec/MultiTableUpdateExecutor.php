@@ -64,7 +64,7 @@ class MultiTableUpdateExecutor extends AbstractSqlExecutor
         $idColumnList = implode(', ', $idColumnNames);
 
         // 1. Create an INSERT INTO temptable ... SELECT identifiers WHERE $AST->getWhereClause()
-        $sqlWalker->setSQLTableAlias($primaryClass->table['name'], 't0', $updateClause->aliasIdentificationVariable);
+        $sqlWalker->setSQLTableAlias($primaryClass->getTableName(), 't0', $updateClause->aliasIdentificationVariable);
 
         $this->_insertSql = 'INSERT INTO ' . $tempTable . ' (' . $idColumnList . ')'
                 . ' SELECT t0.' . implode(', t0.', $idColumnNames);
@@ -141,11 +141,7 @@ class MultiTableUpdateExecutor extends AbstractSqlExecutor
     }
 
     /**
-     * Executes all SQL statements.
-     *
-     * @param Connection $conn The database connection that is used to execute the queries.
-     * @param array $params The parameters.
-     * @override
+     * {@inheritDoc}
      */
     public function execute(Connection $conn, array $params, array $types)
     {

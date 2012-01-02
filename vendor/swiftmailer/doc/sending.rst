@@ -214,7 +214,7 @@ Your username and password will be used to authenticate upon first connect
 when ``send()`` are first used on the Mailer.
 
 If authentication fails, an Exception of type
-``Swift_Transport_TransportException`` will be thrown.
+``Swift_TransportException`` will be thrown.
 
 .. note::
 
@@ -315,7 +315,7 @@ To use the Sendmail Transport:
 
 A sendmail process will be started upon the first call to ``send()``. If the
 process cannot be started successfully an Exception of type
-``Swift_Transport_TransportException`` will be thrown.
+``Swift_TransportException`` will be thrown.
 
 .. code-block:: php
 
@@ -526,8 +526,13 @@ email address on the ``To:`` field.
 
         foreach ($to as $address => $name)
         {
-          $message->setTo(array($address => $name));
-          $numSent += $this->send($message, $failedRecipients);
+          if (is_int($address)) {
+            $message->setTo($name);
+          } else {
+            $message->setTo(array($address => $name));
+          }
+
+          $numSent += $mailer->send($message, $failedRecipients);
         }
 
         printf("Sent %d messages\n", $numSent);

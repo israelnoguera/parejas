@@ -11,6 +11,8 @@
 
 namespace Symfony\Component\DependencyInjection;
 
+use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
+
 /**
  * ContainerInterface is the interface implemented by service container classes.
  *
@@ -46,7 +48,7 @@ interface ContainerInterface
      *
      * @return object The associated service
      *
-     * @throws \InvalidArgumentException if the service is not defined
+     * @throws InvalidArgumentException if the service is not defined
      *
      * @see Reference
      *
@@ -72,7 +74,7 @@ interface ContainerInterface
      *
      * @return mixed  The parameter value
      *
-     * @throws  \InvalidArgumentException if the parameter is not defined
+     * @throws InvalidArgumentException if the parameter is not defined
      *
      * @api
      */
@@ -103,7 +105,6 @@ interface ContainerInterface
      * Enters the given scope
      *
      * @param string $name
-     * @return void
      *
      * @api
      */
@@ -113,7 +114,6 @@ interface ContainerInterface
      * Leaves the current scope, and re-enters the parent scope
      *
      * @param string $name
-     * @return void
      *
      * @api
      */
@@ -123,7 +123,6 @@ interface ContainerInterface
      * Adds a scope to the container
      *
      * @param ScopeInterface $scope
-     * @return void
      *
      * @api
      */
@@ -133,6 +132,7 @@ interface ContainerInterface
      * Whether this container has the given scope
      *
      * @param string $name
+     *
      * @return Boolean
      *
      * @api
@@ -145,6 +145,7 @@ interface ContainerInterface
      * It does however not check if the scope actually exists.
      *
      * @param string $name
+     *
      * @return Boolean
      *
      * @api

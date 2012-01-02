@@ -33,7 +33,7 @@ class Controller extends ContainerAware
     /**
      * Generates a URL from the given parameters.
      *
-     * @param string  $name       The name of the route
+     * @param string  $route      The name of the route
      * @param mixed   $parameters An array of parameters
      * @param Boolean $absolute   Whether to generate an absolute URL
      *
@@ -159,10 +159,28 @@ class Controller extends ContainerAware
     public function getDoctrine()
     {
         if (!$this->container->has('doctrine')) {
-            throw new \LogicException('The DoctrineBundle is not installed in your application.');
+            throw new \LogicException('The DoctrineBundle is not registered in your application.');
         }
 
         return $this->container->get('doctrine');
+    }
+
+    /**
+     * Get a user from the Security Context
+     *
+     * @return mixed
+     *
+     * @throws \LogicException If SecurityBundle is not available
+     */
+    public function getUser()
+    {
+        if (!$this->container->has('security.context')) {
+            throw new \LogicException('The SecurityBundle is not registered in your application.');
+        }
+
+        $token = $this->container->get('security.context')->getToken();
+
+        return null === $token ? null : $token->getUser();
     }
 
     /**

@@ -17,7 +17,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\DefinitionDecorator;
 use Symfony\Component\DependencyInjection\Reference;
-use Symfony\Bundle\DoctrineAbstractBundle\DependencyInjection\AbstractDoctrineExtension;
+use Symfony\Bridge\Doctrine\DependencyInjection\AbstractDoctrineExtension;
 use Symfony\Component\Config\FileLocator;
 
 /**
@@ -31,7 +31,7 @@ class DoctrineExtension extends AbstractDoctrineExtension
 {
     public function load(array $configs, ContainerBuilder $container)
     {
-        $configuration = new Configuration($container->getParameter('kernel.debug'));
+        $configuration = $this->getConfiguration($configs, $container);
         $config = $this->processConfiguration($configuration, $configs);
 
         if (!empty($config['dbal'])) {
@@ -92,9 +92,18 @@ class DoctrineExtension extends AbstractDoctrineExtension
     {
         // configuration
         $configuration = $container->setDefinition(sprintf('doctrine.dbal.%s_connection.configuration', $name), new DefinitionDecorator('doctrine.dbal.connection.configuration'));
-        if (isset($connection['logging']) && $connection['logging']) {
-            $configuration->addMethodCall('setSQLLogger', array(new Reference('doctrine.dbal.logger')));
-            unset ($connection['logging']);
+        $logger = null;
+        if ($connection['logging']) {
+            $logger = new Reference('doctrine.dbal.logger');
+        }
+        unset ($connection['logging']);
+        if ($connection['profiling']) {
+            $logger = $logger ? new Reference('doctrine.dbal.logger.chain') : new Reference('doctrine.dbal.logger.profiling');
+        }
+        unset($connection['profiling']);
+
+        if ($logger) {
+            $configuration->addMethodCall('setSQLLogger', array($logger));
         }
 
         // event manager
@@ -288,8 +297,9 @@ class DoctrineExtension extends AbstractDoctrineExtension
      * In the case of bundles everything is really optional (which leads to autodetection for this bundle) but
      * in the mappings key everything except alias is a required argument.
      *
-     * @param array $entityManager A configured ORM entity manager.
-     * @param ContainerBuilder $container A ContainerBuilder instance
+     * @param array            $entityManager A configured ORM entity manager
+     * @param Definition       $ormConfigDef  A Definition instance
+     * @param ContainerBuilder $container     A ContainerBuilder instance
      */
     protected function loadOrmEntityManagerMappingInformation(array $entityManager, Definition $ormConfigDef, ContainerBuilder $container)
     {
@@ -411,5 +421,10 @@ class DoctrineExtension extends AbstractDoctrineExtension
     public function getNamespace()
     {
         return 'http://symfony.com/schema/dic/doctrine';
+    }
+
+    public function getConfiguration(array $config, ContainerBuilder $container)
+    {
+        return new Configuration($container->getParameter('kernel.debug'));
     }
 }

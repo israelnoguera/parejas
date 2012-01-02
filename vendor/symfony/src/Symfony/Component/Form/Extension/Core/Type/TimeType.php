@@ -53,14 +53,12 @@ class TimeType extends AbstractType
                         array_combine($options['hours'], $options['hours']), 2, '0', STR_PAD_LEFT
                     ),
                     'empty_value' => $options['empty_value']['hour'],
-                    'required' => $options['required'],
                 );
                 $minuteOptions = array(
                     'choice_list' => new PaddedChoiceList(
                         array_combine($options['minutes'], $options['minutes']), 2, '0', STR_PAD_LEFT
                     ),
                     'empty_value' => $options['empty_value']['minute'],
-                    'required' => $options['required'],
                 );
 
                 if ($options['with_seconds']) {
@@ -69,8 +67,15 @@ class TimeType extends AbstractType
                             array_combine($options['seconds'], $options['seconds']), 2, '0', STR_PAD_LEFT
                         ),
                         'empty_value' => $options['empty_value']['second'],
-                        'required' => $options['required'],
                     );
+                }
+
+                // Append generic carry-along options
+                foreach (array('required', 'translation_domain') as $passOpt) {
+                    $hourOptions[$passOpt] = $minuteOptions[$passOpt] = $options[$passOpt];
+                    if ($options['with_seconds']) {
+                        $secondOptions[$passOpt] = $options[$passOpt];
+                    }
                 }
             }
 
@@ -90,11 +95,11 @@ class TimeType extends AbstractType
             $builder->appendNormTransformer(new ReversedTransformer(
                 new DateTimeToStringTransformer($options['data_timezone'], $options['data_timezone'], $format)
             ));
-        } else if ($options['input'] === 'timestamp') {
+        } elseif ($options['input'] === 'timestamp') {
             $builder->appendNormTransformer(new ReversedTransformer(
                 new DateTimeToTimestampTransformer($options['data_timezone'], $options['data_timezone'])
             ));
-        } else if ($options['input'] === 'array') {
+        } elseif ($options['input'] === 'array') {
             $builder->appendNormTransformer(new ReversedTransformer(
                 new DateTimeToArrayTransformer($options['data_timezone'], $options['data_timezone'], $parts)
             ));

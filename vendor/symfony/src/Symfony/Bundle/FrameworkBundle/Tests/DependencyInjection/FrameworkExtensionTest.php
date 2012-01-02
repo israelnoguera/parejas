@@ -76,8 +76,7 @@ abstract class FrameworkExtensionTest extends TestCase
         $container = $this->createContainerFromFile('full');
 
         $this->assertTrue($container->hasDefinition('session'), '->registerSessionConfiguration() loads session.xml');
-        $this->assertEquals('fr', $container->getParameter('session.default_locale'));
-        $this->assertEquals('%session.default_locale%', $container->getDefinition('session')->getArgument(1));
+        $this->assertEquals('fr', $container->getParameter('kernel.default_locale'));
         $this->assertTrue($container->getDefinition('session_listener')->getArgument(1));
         $this->assertEquals('session.storage.native', (string) $container->getAlias('session.storage'));
 
@@ -96,7 +95,7 @@ abstract class FrameworkExtensionTest extends TestCase
 
         $this->assertTrue($container->hasDefinition('templating.name_parser'), '->registerTemplatingConfiguration() loads templating.xml');
 
-        $this->assertEquals('request', $container->getDefinition('templating.helper.assets')->getScope(), '->registerTemplatingConfiguration() sets request scope on assets helper if one or more packages are request-scopes');
+        $this->assertEquals('request', $container->getDefinition('templating.helper.assets')->getScope(), '->registerTemplatingConfiguration() sets request scope on assets helper if one or more packages are request-scoped');
 
         // default package should have one http base url and path package ssl url
         $this->assertTrue($container->hasDefinition('templating.asset.default_package.http'));
@@ -106,7 +105,7 @@ abstract class FrameworkExtensionTest extends TestCase
         $arguments = array_values($package->getArguments());
         $this->assertEquals(array('http://cdn.example.com'), $arguments[0]);
         $this->assertEquals('SomeVersionScheme', $arguments[1]);
-        $this->assertNull($arguments[2]);
+        $this->assertEquals('%%s?%%s', $arguments[2]);
 
         $this->assertTrue($container->hasDefinition('templating.asset.default_package.ssl'));
         $package = $container->getDefinition('templating.asset.default_package.ssl');
@@ -131,7 +130,7 @@ abstract class FrameworkExtensionTest extends TestCase
     {
         $container = $this->createContainerFromFile('templating_url_package');
 
-        $this->assertNotEquals('request', $container->getDefinition('templating.helper.assets')->getScope(), '->registerTemplatingConfiguration() does not set request scope on assets helper if no packages are request-scopes');
+        $this->assertNotEquals('request', $container->getDefinition('templating.helper.assets')->getScope(), '->registerTemplatingConfiguration() does not set request scope on assets helper if no packages are request-scoped');
     }
 
     public function testTranslator()
@@ -149,7 +148,7 @@ abstract class FrameworkExtensionTest extends TestCase
         }
 
         $this->assertContains(
-            realpath(__DIR__.'/../../Resources/translations/validators.fr.xliff'),
+            realpath(__DIR__.'/../../Resources/translations/validators.fr.xlf'),
             array_map(function($resource) use ($resources) { return realpath($resource[1]); }, $resources),
             '->registerTranslatorConfiguration() finds FrameworkExtension translation resources'
         );

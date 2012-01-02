@@ -15,7 +15,6 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\Form\Exception\CreationException;
-use Symfony\Component\Form\Exception\FormException;
 use Symfony\Component\Form\Extension\Core\ChoiceList\PaddedChoiceList;
 use Symfony\Component\Form\Extension\Core\ChoiceList\MonthChoiceList;
 use Symfony\Component\Form\FormView;
@@ -81,22 +80,24 @@ class DateType extends AbstractType
                         array_combine($options['years'], $options['years']), 4, '0', STR_PAD_LEFT
                     ),
                     'empty_value' => $options['empty_value']['year'],
-                    'required' => $options['required'],
                 );
                 $monthOptions = array(
                     'choice_list' => new MonthChoiceList(
                         $formatter, $options['months']
                     ),
                     'empty_value' => $options['empty_value']['month'],
-                    'required' => $options['required'],
                 );
                 $dayOptions = array(
                     'choice_list' => new PaddedChoiceList(
                         array_combine($options['days'], $options['days']), 2, '0', STR_PAD_LEFT
                     ),
                     'empty_value' => $options['empty_value']['day'],
-                    'required' => $options['required'],
                 );
+
+                // Append generic carry-along options
+                foreach (array('required', 'translation_domain') as $passOpt) {
+                    $yearOptions[$passOpt] = $monthOptions[$passOpt] = $dayOptions[$passOpt] = $options[$passOpt];
+                }
             }
 
             $builder
@@ -113,11 +114,11 @@ class DateType extends AbstractType
             $builder->appendNormTransformer(new ReversedTransformer(
                 new DateTimeToStringTransformer($options['data_timezone'], $options['data_timezone'], 'Y-m-d')
             ));
-        } else if ($options['input'] === 'timestamp') {
+        } elseif ($options['input'] === 'timestamp') {
             $builder->appendNormTransformer(new ReversedTransformer(
                 new DateTimeToTimestampTransformer($options['data_timezone'], $options['data_timezone'])
             ));
-        } else if ($options['input'] === 'array') {
+        } elseif ($options['input'] === 'array') {
             $builder->appendNormTransformer(new ReversedTransformer(
                 new DateTimeToArrayTransformer($options['data_timezone'], $options['data_timezone'], array('year', 'month', 'day'))
             ));

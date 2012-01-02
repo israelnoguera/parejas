@@ -35,16 +35,20 @@ class CsvFileLoader extends ArrayLoader implements LoaderInterface
     {
         $messages = array();
 
+        if (!stream_is_local($resource)) {
+            throw new \InvalidArgumentException(sprintf('This is not a local file "%s".', $resource));
+        }
+
         try {
             $file = new \SplFileObject($resource, 'rb');
-        } catch(\RuntimeException $e) {
+        } catch (\RuntimeException $e) {
             throw new \InvalidArgumentException(sprintf('Error opening file "%s".', $resource));
         }
 
         $file->setFlags(\SplFileObject::READ_CSV | \SplFileObject::SKIP_EMPTY);
         $file->setCsvControl($this->delimiter, $this->enclosure, $this->escape);
 
-        foreach($file as $data) {
+        foreach ($file as $data) {
             if (substr($data[0], 0, 1) === '#') {
                 continue;
             }

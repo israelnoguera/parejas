@@ -23,6 +23,7 @@ namespace Doctrine\DBAL\Portability;
 use Doctrine\Common\EventManager;
 use Doctrine\DBAL\Configuration;
 use Doctrine\DBAL\Driver;
+use Doctrine\DBAL\Cache\QueryCacheProfile;
 
 class Connection extends \Doctrine\DBAL\Connection
 {
@@ -45,7 +46,7 @@ class Connection extends \Doctrine\DBAL\Connection
     /**
      * @var int
      */
-    private $case = \PDO::CASE_NATURAL;
+    private $case;
     
     public function connect()
     {
@@ -86,9 +87,9 @@ class Connection extends \Doctrine\DBAL\Connection
         return $this->case;
     }
     
-    public function executeQuery($query, array $params = array(), $types = array())
+    public function executeQuery($query, array $params = array(), $types = array(), QueryCacheProfile $qcp = null)
     {
-        return new Statement(parent::executeQuery($query, $params, $types), $this);
+        return new Statement(parent::executeQuery($query, $params, $types, $qcp), $this);
     }
     
     /**
